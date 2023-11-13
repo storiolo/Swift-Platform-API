@@ -123,13 +123,13 @@ public class _DataTracks_: ObservableObject {
         return false
     }
     
-    public func isIn(_ track_id: String) -> Bool {
-        for item in self.tracks {
+    public func isIn(_ track_id: String) -> Int {
+        for (index, item) in self.tracks.enumerated() {
             if item.uri == track_id {
-                return true
+                return index
             }
         }
-        return false
+        return -1
     }
     
     
