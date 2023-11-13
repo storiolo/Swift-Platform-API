@@ -64,6 +64,7 @@ extension _DeezerAPI_ {
              var playlists: _DataPlaylists_
              playlists = _DataPlaylists_(platform: .Deezer)
              if let results = results?.data {
+                 print("results")
                  for result in results {
                      playlists.append(result)
                  }
