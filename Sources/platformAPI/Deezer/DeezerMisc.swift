@@ -61,14 +61,10 @@ extension _DeezerAPI_ {
     
     public func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void) {
          deezer.getPlaylist(playlist_id: playlist_id){ results in
-             print(results?.total)
-             print("??")
              var playlists: _DataPlaylists_
              playlists = _DataPlaylists_(platform: .Deezer)
-             if let results = results?.data {
-                 for result in results {
-                     playlists.append(result)
-                 }
+             if let results = results {
+                 playlists.append(results)
              }
              completed(playlists)
          }
