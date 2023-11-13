@@ -52,6 +52,9 @@ public class _DataPlaylists_: ObservableObject {
     
     
     //<<---- OPERATORS ---->>\\
+    public func isEmpty() -> Bool {
+        return self.playlists.isEmpty
+    }
     public static func +=(left: inout _DataPlaylists_, right: _DataPlaylists_) {
         left.playlists += right.playlists
     }
