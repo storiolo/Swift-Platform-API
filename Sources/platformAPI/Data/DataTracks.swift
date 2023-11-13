@@ -123,6 +123,15 @@ public class _DataTracks_: ObservableObject {
         return false
     }
     
+    public func isIn(_ track_id: String) -> Bool {
+        for item in self.tracks {
+            if item.uri == track_id {
+                return true
+            }
+        }
+        return false
+    }
+    
     
     
     //<<---- SAVE ---->>\\
