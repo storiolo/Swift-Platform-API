@@ -73,6 +73,9 @@ public class _DataPlaylists_: ObservableObject {
     public func add(_ right: _DataPlaylists_) {
         self.playlists += right.playlists
     }
+    public func reset() {
+        self.playlists = []
+    }
     
     //<<---- TOOLS ---->>\\
     public func search(search: String) -> _DataPlaylists_ {
