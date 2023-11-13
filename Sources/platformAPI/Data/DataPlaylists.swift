@@ -70,7 +70,6 @@ public class _DataPlaylists_: ObservableObject {
         self.playlists = right.playlists
         self.platform = right.platform
     }
-    
     public func add(_ right: _DataPlaylists_) {
         self.playlists += right.playlists
     }
