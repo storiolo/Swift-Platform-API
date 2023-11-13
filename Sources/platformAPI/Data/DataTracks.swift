@@ -12,6 +12,7 @@ import DeezerAPI
 public class _DataTracks_: ObservableObject {
     public var platform: platform
     public var name: String
+    public var uri: String
     @Published public var tracks: [_track_] = []
     
     public struct _track_: Identifiable {
@@ -74,9 +75,10 @@ public class _DataTracks_: ObservableObject {
     }
     
     
-    public init(platform: platform, name: String = "None") {
+    public init(platform: platform, name: String = "None", uri: String = "") {
         self.platform = platform
         self.name = name
+        self.uri = uri
     }
     
     

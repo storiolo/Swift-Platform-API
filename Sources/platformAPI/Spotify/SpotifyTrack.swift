@@ -10,7 +10,7 @@ extension _SpotifyAPI_ {
     
     public func getAllTracks(playlist_id: String, completed: @escaping (_DataTracks_) -> Void) {
         var concatenatedTracks: _DataTracks_
-        concatenatedTracks = _DataTracks_(platform: .Spotify)
+        concatenatedTracks = _DataTracks_(platform: .Spotify, uri: playlist_id)
         api.playlistTracks(playlist_id, offset: 0)
             .extendPagesConcurrently(api)
             .receive(on: DispatchQueue.main)

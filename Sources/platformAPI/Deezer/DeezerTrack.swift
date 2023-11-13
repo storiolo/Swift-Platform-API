@@ -12,7 +12,7 @@ extension _DeezerAPI_ {
     public func getAllTracks(playlist_id: String, completed: @escaping (_DataTracks_) -> Void){
         deezer.getAllTracks(playlist_id: playlist_id){ results in
             var tracks: _DataTracks_
-            tracks = _DataTracks_(platform: .Deezer)
+            tracks = _DataTracks_(platform: .Deezer, uri: playlist_id)
             if let results = results?.data {
                 for result in results {
                     tracks.append(result)
