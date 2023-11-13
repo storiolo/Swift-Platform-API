@@ -112,6 +112,7 @@ public class _DataTracks_: ObservableObject {
         self.tracks = right.tracks
         self.platform = right.platform
         self.name = right.name
+        self.uri = right.uri
     }
     public func isIn(_ track: _track_) -> Bool {
         for item in self.tracks {
