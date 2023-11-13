@@ -99,4 +99,25 @@ extension _SpotifyAPI_ {
             .store(in: &cancellables)
     }
     
+    public func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void) {
+         var playlists: _DataPlaylists_
+         playlists = _DataPlaylists_(platform: .Spotify)
+
+         self.api.playlist(playlist_id)
+             .receive(on: DispatchQueue.main)
+             .sink(
+                 receiveCompletion: { _ in },
+                 receiveValue: { playlistsItem in
+
+                     playlists.playlists.append(_DataPlaylists_._playlist_(
+                         title: playlistsItem.name,
+                         uri: playlistsItem.uri,
+                         image_uri: playlistsItem.images.largest?.url.absoluteString ?? "",
+                         creator_uri: playlistsItem.owner?.uri ?? ""))
+
+                     completed(playlists)
+                 }
+             )
+             .store(in: &cancellables)
+     }
 }

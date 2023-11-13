@@ -58,4 +58,18 @@ extension _DeezerAPI_ {
         print("Not Available on Deezer")
         completed()
     }
+    
+    public func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void) {
+         deezer.getPlaylist(playlist_id: playlist_id){ results in
+             var playlists: _DataPlaylists_
+             playlists = _DataPlaylists_(platform: .Deezer)
+             if let results = results?.data {
+                 for result in results {
+                     playlists.append(result)
+                 }
+             }
+             completed(playlists)
+         }
+
+     }
 }

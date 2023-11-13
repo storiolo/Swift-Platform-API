@@ -47,6 +47,7 @@ public protocol API {
     //<<---- Misc ---->>\\
     func getImageAlbum(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
     func getImageAlbum(playlists: _DataPlaylists_, index: Int, completed: @escaping () -> Void)
+    func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void)
         //Not available in Deezer
     func getSongGenres(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
     func getSongInfo(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)

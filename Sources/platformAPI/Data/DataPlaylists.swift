@@ -37,7 +37,13 @@ public class _DataPlaylists_: ObservableObject {
             self.image = nil
             self.creator_uri = String(playlist.creator?.id ?? 0)
         }
-        
+        public init(title: String, uri: String, image_uri: String, creator_uri: String){
+              self.title = title
+              self.uri = uri
+              self.image_uri = image_uri
+              self.image = nil
+              self.creator_uri = creator_uri
+          }
     }
     
     public init(platform: platform) {
