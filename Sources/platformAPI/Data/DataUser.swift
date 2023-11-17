@@ -69,5 +69,13 @@ public class _DataUsers_: ObservableObject {
         self.users = right.users
         self.platform = right.platform
     }
+    public func isIn(_ user: _user_) -> Bool {
+        for item in self.users {
+            if item.uri == user.uri {
+                return true
+            }
+        }
+        return false
+    }
     
 }
