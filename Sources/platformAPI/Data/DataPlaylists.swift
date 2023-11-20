@@ -79,7 +79,7 @@ public class _DataPlaylists_: ObservableObject {
     public func reset() {
         self.playlists = []
     }
-    public func get(index: Int) -> _playlist_? {
+    public func get(_ index: Int) -> _playlist_? {
         if index < self.playlists.count {
             return self.playlists[index]
         }
