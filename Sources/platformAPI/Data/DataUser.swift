@@ -77,5 +77,10 @@ public class _DataUsers_: ObservableObject {
         }
         return false
     }
-    
+    public func get(index: Int) -> _user_? {
+        if index < self.users.count {
+            return self.users[index]
+        }
+        return nil
+    }
 }

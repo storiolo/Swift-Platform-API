@@ -122,7 +122,6 @@ public class _DataTracks_: ObservableObject {
         }
         return false
     }
-    
     public func isIn(_ track_id: String) -> Bool {
         for item in self.tracks {
             if item.uri == track_id {
@@ -130,6 +129,12 @@ public class _DataTracks_: ObservableObject {
             }
         }
         return false
+    }
+    public func get(index: Int) -> _track_? {
+        if index < self.tracks.count {
+            return self.tracks[index]
+        }
+        return nil
     }
     
     
