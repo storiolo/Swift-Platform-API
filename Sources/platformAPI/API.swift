@@ -22,6 +22,7 @@ public protocol API {
     
     
     //<<---- Search ---->>\\
+    func SearchPlaylist(search: String, max: Int, completed: @escaping (_DataPlaylists_) -> Void)
     func SearchPlaylist(search: String, completed: @escaping (_DataPlaylists_) -> Void)
     func SearchTrack(search: String, completed: @escaping (_DataTracks_) -> Void)
     func SearchUser(search: String, completed: @escaping (_DataUsers_) -> Void)

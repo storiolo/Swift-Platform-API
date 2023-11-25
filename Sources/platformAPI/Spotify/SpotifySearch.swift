@@ -6,13 +6,18 @@
 import Foundation
 
 extension _SpotifyAPI_ {
+    
     public func SearchPlaylist(search: String, completed: @escaping (_DataPlaylists_) -> Void) {
+        self.SearchPlaylist(search: search, max: 10, completed: completed)
+    }
+    
+    public func SearchPlaylist(search: String, max: Int, completed: @escaping (_DataPlaylists_) -> Void) {
         var playlists: _DataPlaylists_
         playlists = _DataPlaylists_(platform: .Spotify)
         if search.isEmpty { completed(playlists); return }
 
         self.cancellables.insert(api.search(
-            query: search, categories: [.playlist], limit: 50
+            query: search, categories: [.playlist], limit: max
         )
         .receive(on: DispatchQueue.main)
         .sink(

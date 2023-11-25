@@ -11,9 +11,11 @@ extension _SpotifyAPI_ {
     func loadNextPage(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
         if currentPage == previousPage || currentPage == nil  {
             completed(tracks)
-        }
-        loadNextPage_T(href: currentPage) { url, tracks_ in
-            self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_, completed: completed) //current page become nextpage
+            return
+        } else {
+            loadNextPage_T(href: currentPage) { url, tracks_ in
+                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_, completed: completed) //current page become nextpage
+            }
         }
     }
     func loadNextPage_T(href: URL?, completed: @escaping (URL?, _DataTracks_) -> Void) {
@@ -42,9 +44,11 @@ extension _SpotifyAPI_ {
     func loadNextPage(currentPage: URL?, previousPage: URL?, playlists: _DataPlaylists_, completed: @escaping (_DataPlaylists_) -> Void) {
         if currentPage == previousPage || currentPage == nil  {
             completed(playlists)
-        }
-        loadNextPage_P(href: currentPage) { url, playlists_ in
-            self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_, completed: completed) //current page become nextpage
+            return
+        } else {
+            loadNextPage_P(href: currentPage) { url, playlists_ in
+                self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_, completed: completed) //current page become nextpage
+            }
         }
     }
     func loadNextPage_P(href: URL?, completed: @escaping (URL?, _DataPlaylists_) -> Void) {

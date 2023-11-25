@@ -162,6 +162,11 @@ public class _NoAPI_: ObservableObject, API {
         completed(_DataPlaylists_(platform: .None))
     }
     
+    public func SearchPlaylist(search: String, max: Int, completed: @escaping (_DataPlaylists_) -> Void) {
+        print("API: No API Selected")
+        completed(_DataPlaylists_(platform: .None))
+    }
+    
     public func SearchTrack(search: String, completed: @escaping (_DataTracks_) -> Void) {
         print("API: No API Selected")
         completed(_DataTracks_(platform: .None))
