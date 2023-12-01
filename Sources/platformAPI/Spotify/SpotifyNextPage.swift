@@ -14,7 +14,7 @@ extension _SpotifyAPI_ {
             return
         } else {
             loadNextPage_T(href: currentPage) { url, tracks_ in
-                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_, completed: completed) //current page become nextpage
+                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){_ in } //current page become nextpage
             }
         }
     }
