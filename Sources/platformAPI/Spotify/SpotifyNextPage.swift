@@ -9,7 +9,9 @@ import SpotifyWebAPI
 extension _SpotifyAPI_ {
     //The first time this function is called, currentPage should be the page and nextpage should be empty
     func loadNextPage(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
+        self.isLoading = true
         if currentPage == previousPage || currentPage == nil  {
+            self.isLoading = false
             completed(tracks)
             return
         } else {
@@ -28,6 +30,8 @@ extension _SpotifyAPI_ {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { PlaylistTracks in
+                    self.ld_max = PlaylistTracks.total
+                    self.ld_count = PlaylistTracks.offset
                     let playlistItems_ = PlaylistTracks.items.map(\.item)
                     let playlistItems: [Track] = playlistItems_.compactMap { $0 }
                     for playlistItem in playlistItems {
@@ -42,7 +46,9 @@ extension _SpotifyAPI_ {
     
     
     func loadNextPage(currentPage: URL?, previousPage: URL?, playlists: _DataPlaylists_, completed: @escaping (_DataPlaylists_) -> Void) {
+        self.isLoading = true
         if currentPage == previousPage || currentPage == nil  {
+            self.isLoading = false
             completed(playlists)
             return
         } else {
@@ -61,6 +67,8 @@ extension _SpotifyAPI_ {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { playlistsPage in
+                    self.ld_max = playlistsPage.total
+                    self.ld_count = playlistsPage.offset
                     for playlistsItem in playlistsPage.items {
                         playlists.append(playlistsItem)
                     }

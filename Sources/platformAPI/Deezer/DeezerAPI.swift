@@ -40,4 +40,11 @@ public class _DeezerAPI_: ObservableObject, API {
                                 permissions: permissions)
     }
     
+    @Published var isLoading = false
+    @Published var ld_max = 0
+    @Published var ld_count = 0
+    public func getfuncStatus() -> (Bool, Int, Int){
+        return (isLoading, ld_max, ld_count)
+    }
+    
 }

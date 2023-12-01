@@ -181,4 +181,8 @@ public class _NoAPI_: ObservableObject, API {
         print("API: No API Selected")
         completed()
     }
+    
+    public func getfuncStatus() -> (Bool, Int, Int){
+        return (false, 0, 0)
+    }
 }

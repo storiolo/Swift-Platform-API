@@ -20,6 +20,9 @@ public protocol API {
     func disconnect()
     func getPlatform() -> platform
     
+    //only used in spotify and for NextPage
+    func getfuncStatus() -> (Bool, Int, Int)
+    
     
     //<<---- Search ---->>\\
     func SearchPlaylist(search: String, max: Int, completed: @escaping (_DataPlaylists_) -> Void)
