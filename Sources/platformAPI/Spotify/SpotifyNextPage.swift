@@ -16,7 +16,9 @@ extension _SpotifyAPI_ {
             return
         } else {
             loadNextPage_T(href: currentPage) { url, tracks_ in
-                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){_ in } //current page become nextpage
+                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
+                    completed(result)
+                } //current page become nextpage
             }
         }
     }
@@ -53,7 +55,9 @@ extension _SpotifyAPI_ {
             return
         } else {
             loadNextPage_P(href: currentPage) { url, playlists_ in
-                self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_){_ in } //current page become nextpage
+                self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_){ result in
+                    completed(result)
+                } //current page become nextpage
             }
         }
     }
