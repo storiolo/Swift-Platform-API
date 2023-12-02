@@ -13,6 +13,8 @@ extension _SpotifyAPI_ {
         if currentPage == previousPage || currentPage == nil  {
             self.isLoading = false
             print("end Pages")
+            print(currentPage)
+            print(previousPage)
             completed(tracks)
             return
         } else {
