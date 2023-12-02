@@ -12,23 +12,19 @@ extension _SpotifyAPI_ {
         self.isLoading = true
         if currentPage == previousPage || currentPage == nil  {
             self.isLoading = false
+            print("end Pages")
             completed(tracks)
             return
         } else {
             loadNextPage_T(href: currentPage) { url, tracks_ in
-                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
-                    completed(result)
-                } //current page become nextpage
+                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in } //current page become nextpage
             }
         }
     }
     func loadNextPage_T(href: URL?, completed: @escaping (URL?, _DataTracks_) -> Void) {
         var tracks: _DataTracks_
         tracks = _DataTracks_(platform: .Spotify)
-        guard let href = href else { 
-            completed(nil, tracks)
-            return
-        }
+        guard let href = href else { return }
         api
             .getFromHref(href, responseType: PagingObject<SavedTrack>.self)
             .receive(on: DispatchQueue.main)
@@ -43,8 +39,6 @@ extension _SpotifyAPI_ {
                         if playlistItem.isLocal { continue }
                         tracks.append(playlistItem)
                     }
-                    print("ok: ")
-                    print(PlaylistTracks.next)
                     completed(PlaylistTracks.next, tracks)
                 }
             )
@@ -60,9 +54,7 @@ extension _SpotifyAPI_ {
             return
         } else {
             loadNextPage_P(href: currentPage) { url, playlists_ in
-                self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_){ result in
-                    completed(result)
-                } //current page become nextpage
+                self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_){ result in } //current page become nextpage
             }
         }
     }
