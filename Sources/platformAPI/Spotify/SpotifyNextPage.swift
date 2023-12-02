@@ -10,6 +10,7 @@ extension _SpotifyAPI_ {
     //The first time this function is called, currentPage should be the page and nextpage should be empty
     func loadNextPage(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
         self.isLoading = true
+        print("STARTIng fuNCtioN")
         if currentPage == previousPage || currentPage == nil  {
             self.isLoading = false
             print("end Pages")
