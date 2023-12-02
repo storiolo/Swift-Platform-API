@@ -12,8 +12,6 @@ extension _SpotifyAPI_ {
         self.isLoading = true
         if currentPage == previousPage || currentPage == nil  {
             self.isLoading = false
-            print("end: ")
-            print(currentPage)
             completed(tracks)
             return
         } else {
@@ -27,7 +25,10 @@ extension _SpotifyAPI_ {
     func loadNextPage_T(href: URL?, completed: @escaping (URL?, _DataTracks_) -> Void) {
         var tracks: _DataTracks_
         tracks = _DataTracks_(platform: .Spotify)
-        guard let href = href else { return }
+        guard let href = href else { 
+            completed(nil, tracks)
+            return
+        }
         api
             .getFromHref(href, responseType: PagingObject<SavedTrack>.self)
             .receive(on: DispatchQueue.main)
@@ -42,6 +43,7 @@ extension _SpotifyAPI_ {
                         if playlistItem.isLocal { continue }
                         tracks.append(playlistItem)
                     }
+                    print("ok: ")
                     print(PlaylistTracks.next)
                     completed(PlaylistTracks.next, tracks)
                 }
