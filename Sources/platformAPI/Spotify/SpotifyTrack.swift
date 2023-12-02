@@ -24,7 +24,7 @@ extension _SpotifyAPI_ {
                         concatenatedTracks.append(playlistItem)
                     }
                     
-                    self.loadNextPage(currentPage: PlaylistTracks.next, previousPage: nil, tracks: concatenatedTracks){ tracks_ in
+                    self.loadNextPage_Tracks(currentPage: PlaylistTracks.next, previousPage: nil, tracks: concatenatedTracks){ tracks_ in
                         completed(tracks_)
                     }
                 }

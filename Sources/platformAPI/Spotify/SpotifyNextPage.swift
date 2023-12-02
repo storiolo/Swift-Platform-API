@@ -8,25 +8,35 @@ import SpotifyWebAPI
 
 extension _SpotifyAPI_ {
     //The first time this function is called, currentPage should be the page and nextpage should be empty
-    func loadNextPage(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
+    func loadNextPage_Tracks(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
         self.isLoading = true
-        print("STARTIng fuNCtioN")
         if currentPage == previousPage || currentPage == nil  {
             self.isLoading = false
-            print("end Pages")
-            print(currentPage)
-            print(previousPage)
             completed(tracks)
             return
         } else {
             loadNextPage_T(href: currentPage) { url, tracks_ in
-                print("goign to NEXTPAGE")
-                self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
+                self.loadNextPage_Tracks(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
                     return
                 } //current page become nextpage
             }
         }
     }
+    
+    func loadNextPage_User(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
+        self.isLoading = true
+        if currentPage == previousPage || currentPage == nil  {
+            self.isLoading = false
+            completed(tracks)
+            return
+        } else {
+            loadNextPage_T(href: currentPage) { url, tracks_ in
+                self.loadNextPage_Tracks(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_, completed: completed) //current page become nextpage
+            }
+        }
+    }
+    
+    
     func loadNextPage_T(href: URL?, completed: @escaping (URL?, _DataTracks_) -> Void) {
         var tracks: _DataTracks_
         tracks = _DataTracks_(platform: .Spotify)
