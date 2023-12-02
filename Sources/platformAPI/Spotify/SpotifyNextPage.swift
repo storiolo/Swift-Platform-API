@@ -17,6 +17,7 @@ extension _SpotifyAPI_ {
             return
         } else {
             loadNextPage_T(href: currentPage) { url, tracks_ in
+                print("goign to NEXTPAGE")
                 self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
                     return
                 } //current page become nextpage
