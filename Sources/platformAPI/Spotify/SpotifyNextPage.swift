@@ -9,14 +9,20 @@ import SpotifyWebAPI
 extension _SpotifyAPI_ {
     //The first time this function is called, currentPage should be the page and nextpage should be empty
     func loadNextPage(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
+        print("start: ")
+        print(currentPage)
         self.isLoading = true
         if currentPage == previousPage || currentPage == nil  {
             self.isLoading = false
+            print("end: ")
+            print(currentPage)
             completed(tracks)
             return
         } else {
             loadNextPage_T(href: currentPage) { url, tracks_ in
                 self.loadNextPage(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
+                    print("end: ")
+                    print(currentPage)
                     completed(result)
                 } //current page become nextpage
             }
