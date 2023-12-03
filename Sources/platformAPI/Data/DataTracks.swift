@@ -143,7 +143,13 @@ public class _DataTracks_: ObservableObject {
     public func saveDatabase() {
         let trackProperties = ["title", "artist", "uri", "artist_uri", "preview_uri", "image_uri", "genres"]
         for property in trackProperties {
-            let values = tracks.map { $0[keyPath: \.self] }
+            let values = tracks.map { track in
+                let mirror = Mirror(reflecting: track)
+                for case let (label?, value) in mirror.children where label == property {
+                    return value
+                }
+                return ""
+            }
             UserDefaults.standard.set(values, forKey: property)
         }
         UserDefaults.standard.set(self.platform.rawValue, forKey: "platform")
