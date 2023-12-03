@@ -77,8 +77,9 @@ extension _SpotifyAPI_ {
                         )
                         .store(in: &cancellables)
                 }
-                
-                
+            } else {
+                self.isLoading = false
+                completed()
             }
             
         }
