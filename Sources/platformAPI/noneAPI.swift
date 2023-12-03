@@ -44,6 +44,9 @@ public class _NoAPI_: ObservableObject, API {
     public func getSongGenres(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
         print("API: No API Selected")
     }
+    public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
+        print("API: No API Selected")
+    }
     
     public func getSongInfo(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
         print("API: No API Selected")

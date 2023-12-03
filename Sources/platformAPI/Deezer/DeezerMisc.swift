@@ -52,6 +52,11 @@ extension _DeezerAPI_ {
         print("Not working on Deezer")
         completed()
     }
+    public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
+        print("Not working on Deezer")
+        completed()
+    }
+    
     
     public func getSongInfo(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
         print("Not Available on Deezer")

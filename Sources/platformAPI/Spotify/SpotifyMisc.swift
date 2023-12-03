@@ -26,6 +26,47 @@ extension _SpotifyAPI_ {
             }
         }
     }
+    public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
+        if tracks.tracks.count > 0 {
+
+            //retrieve only tracks with empty genres
+            var tmpIndex: [Int] = [] //index of songs with no genres in tracks
+            var tmpArtists_arr: [[String]] = [[]] //pack of 50 of artist_uri
+            tmpArtists_arr.append([])
+            var tmpArtistsIndex = 0 //index of Artists
+            
+            for (index, track) in tracks.tracks.enumerated() {
+                if track.genres.isEmpty {
+                    if tmpArtists_arr[tmpArtistsIndex].count >= 50 {
+                        tmpArtistsIndex += 1
+                        tmpArtists_arr.append([])
+                    }
+                    tmpArtists_arr[tmpArtistsIndex].append(track.artist_uri)
+                    tmpIndex.append(index)
+                }
+            }
+            
+            if !tmpIndex.isEmpty {
+                //Load artists
+                for (index, tmpArtists) in tmpArtists_arr.enumerated() {
+                    api.artists(tmpArtists)
+                        .receive(on: DispatchQueue.main)
+                        .sink(
+                            receiveCompletion: { _ in },
+                            receiveValue: { artists in
+                                for artist in artists {
+                                    if let genres = artist?.genres {
+                                        tracks.tracks[tmpIndex[index]].genres = genres.joined(separator: " / ")
+                                    }
+                                }
+                            }
+                        )
+                        .store(in: &cancellables)
+                }
+            }
+            
+        }
+    }
     
     public func getImageAlbum(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
         if index < tracks.tracks.count {
