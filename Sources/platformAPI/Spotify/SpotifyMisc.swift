@@ -49,10 +49,19 @@ extension _SpotifyAPI_ {
             
             if !tmpIndex.isEmpty {
                 //Load artists
+                var index = 0
                 self.ld_max = tmpArtists_arr.count
-                for (index, tmpArtists) in tmpArtists_arr.enumerated() {
-                    self.ld_count = index
-                    api.artists(tmpArtists)
+                loadNext(currentIndex: 0)
+                func loadNext(currentIndex: Int){
+                    guard currentIndex < tmpArtists_arr.count else {
+                        self.isLoading = false
+                        completed()
+                        return
+                    }
+                    
+                    
+                    self.ld_count = currentIndex
+                    api.artists(tmpArtists_arr[currentIndex])
                         .receive(on: DispatchQueue.main)
                         .sink(
                             receiveCompletion: { _ in },
@@ -60,14 +69,16 @@ extension _SpotifyAPI_ {
                                 for artist in artists {
                                     if let genres = artist?.genres {
                                         tracks.tracks[tmpIndex[index]].genres = genres.joined(separator: " / ")
+                                        index += 1
                                     }
                                 }
-                                self.isLoading = false
-                                completed()
+                                loadNext(currentIndex: currentIndex+1)
                             }
                         )
                         .store(in: &cancellables)
                 }
+                
+                
             }
             
         }
