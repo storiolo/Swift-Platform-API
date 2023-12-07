@@ -31,26 +31,24 @@ extension _DeezerAPI_ {
     }
     
     public func getSongGenres(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
-//        deezer.getTrack(track_id: tracks.tracks[index].uri){ track in
-//            if let genre_id = track?.album?.genre_id {
-//                self.deezer.getGenres(genre_id: String(genre_id)){ genres in
-//                    if let genres = genres?.data {
-//                        var arr_genres: [String] = []
-//                        for genre in genres {
-//                            arr_genres.append(genre.name ?? "")
-//                        }
-//                        tracks.tracks[index].genres = arr_genres.joined(separator: " / ")
-//                        completed()
-//                    } else {
-//                        completed()
-//                    }
-//                }
-//            } else {
-//                completed()
-//            }
-//        }
-        print("Not working on Deezer")
-        completed()
+        deezer.getTrack(track_id: tracks.tracks[index].uri){ track in
+            if let genre_id = track?.album?.genre_id {
+                self.deezer.getGenres(genre_id: String(genre_id)){ genres in
+                    if let genres = genres?.data {
+                        var arr_genres: [String] = []
+                        for genre in genres {
+                            arr_genres.append(genre.name ?? "")
+                        }
+                        tracks.tracks[index].genres = arr_genres.joined(separator: " / ")
+                        completed()
+                    } else {
+                        completed()
+                    }
+                }
+            } else {
+                completed()
+            }
+        }
     }
     public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
         print("Not working on Deezer")
