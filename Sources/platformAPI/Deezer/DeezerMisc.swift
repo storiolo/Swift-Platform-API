@@ -51,8 +51,21 @@ extension _DeezerAPI_ {
         }
     }
     public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
-        print("Not working on Deezer")
-        completed()
+        get(index: 0)
+        self.ld_max = tracks.tracks.count
+        self.isLoading = true
+        func get(index: Int){
+            guard index < tracks.tracks.count else {
+                self.isLoading = false
+                completed()
+                return
+            }
+            
+            self.ld_count = index
+            self.getSongGenres(tracks: tracks, index: index){
+                get(index: index+1)
+            }
+        }
     }
     
     
