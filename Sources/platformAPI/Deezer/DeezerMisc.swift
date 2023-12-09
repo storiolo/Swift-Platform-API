@@ -32,9 +32,9 @@ extension _DeezerAPI_ {
     
     public func getSongGenres(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
         deezer.getTrack(track_id: tracks.tracks[index].uri){ track in
-            if let genre_id = track?.album?.genre_id {
-                self.deezer.getGenres(genre_id: String(genre_id)){ genres in
-                    if let genres = genres?.data {
+            if let album_id = track?.album?.id {
+                self.deezer.getAlbum(album_id: String(album_id)){ album in
+                    if let genres = album?.genres {
                         var arr_genres: [String] = []
                         for genre in genres {
                             arr_genres.append(genre.name ?? "")
