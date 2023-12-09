@@ -23,7 +23,11 @@ extension _SpotifyAPI_ {
                         }
                     )
                     .store(in: &cancellables)
+            } else {
+                completed()
             }
+        } else {
+            completed()
         }
     }
     public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
