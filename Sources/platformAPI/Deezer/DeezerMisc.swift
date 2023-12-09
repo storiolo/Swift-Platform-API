@@ -34,7 +34,7 @@ extension _DeezerAPI_ {
         deezer.getTrack(track_id: tracks.tracks[index].uri){ track in
             if let album_id = track?.album?.id {
                 self.deezer.getAlbum(album_id: String(album_id)){ album in
-                    if let genres = album?.genres {
+                    if let genres = album?.genres?.data {
                         var arr_genres: [String] = []
                         for genre in genres {
                             arr_genres.append(genre.name ?? "")
