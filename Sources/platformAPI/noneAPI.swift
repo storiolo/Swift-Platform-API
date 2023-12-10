@@ -185,7 +185,7 @@ public class _NoAPI_: ObservableObject, API {
         completed()
     }
     
-    public func getfuncStatus() -> (Bool, Int, Int){
-        return (false, 0, 0)
+    public func getfuncStatus() -> [_arrStatus_._Status_] {
+        return []
     }
 }

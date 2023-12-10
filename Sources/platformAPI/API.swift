@@ -21,7 +21,7 @@ public protocol API {
     func getPlatform() -> platform
     
     //only used in spotify and for NextPage
-    func getfuncStatus() -> (Bool, Int, Int)
+    func getfuncStatus() -> [_arrStatus_._Status_]
     
     
     //<<---- Search ---->>\\

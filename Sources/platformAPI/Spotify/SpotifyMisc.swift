@@ -32,7 +32,6 @@ extension _SpotifyAPI_ {
     }
     public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
         if tracks.tracks.count > 0 {
-            self.isLoading = true
             
             //retrieve only tracks with empty genres
             var tmpIndex: [Int] = [] //index of songs with no genres in tracks
@@ -54,17 +53,17 @@ extension _SpotifyAPI_ {
             if !tmpIndex.isEmpty {
                 //Load artists
                 var index = 0
-                self.ld_max = tmpArtists_arr.count
+                let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: tmpArtists_arr.count)
                 loadNext(currentIndex: 0)
                 func loadNext(currentIndex: Int){
                     guard currentIndex < tmpArtists_arr.count else {
-                        self.isLoading = false
+                        self.arrStatus.delete_status(id: status_id)
                         completed()
                         return
                     }
                     
                     
-                    self.ld_count = currentIndex
+                    self.arrStatus.inc_status(id: status_id)
                     api.artists(tmpArtists_arr[currentIndex])
                         .receive(on: DispatchQueue.main)
                         .sink(
@@ -82,7 +81,6 @@ extension _SpotifyAPI_ {
                         .store(in: &cancellables)
                 }
             } else {
-                self.isLoading = false
                 completed()
             }
             

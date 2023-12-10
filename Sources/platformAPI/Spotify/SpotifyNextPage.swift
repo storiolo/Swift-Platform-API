@@ -8,36 +8,32 @@ import SpotifyWebAPI
 
 extension _SpotifyAPI_ {
     //The first time this function is called, currentPage should be the page and nextpage should be empty
-    func loadNextPage_Tracks(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
-        self.isLoading = true
+    func loadNextPage_Tracks(status_id: UUID, currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
         if currentPage == previousPage || currentPage == nil  {
-            self.isLoading = false
             completed(tracks)
             return
         } else {
-            loadNextPage_T(href: currentPage) { url, tracks_ in
-                self.loadNextPage_Tracks(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
+            loadNextPage_T(status_id: status_id, href: currentPage) { url, tracks_ in
+                self.loadNextPage_Tracks(status_id: status_id, currentPage: url, previousPage: currentPage, tracks: tracks+tracks_){ result in
                     return
                 } //current page become nextpage
             }
         }
     }
     
-    func loadNextPage_User(currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
-        self.isLoading = true
+    func loadNextPage_User(status_id: UUID, currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
         if currentPage == previousPage || currentPage == nil  {
-            self.isLoading = false
             completed(tracks)
             return
         } else {
-            loadNextPage_T(href: currentPage) { url, tracks_ in
-                self.loadNextPage_User(currentPage: url, previousPage: currentPage, tracks: tracks+tracks_, completed: completed) //current page become nextpage
+            loadNextPage_T(status_id: status_id, href: currentPage) { url, tracks_ in
+                self.loadNextPage_User(status_id: status_id, currentPage: url, previousPage: currentPage, tracks: tracks+tracks_, completed: completed) //current page become nextpage
             }
         }
     }
     
     
-    func loadNextPage_T(href: URL?, completed: @escaping (URL?, _DataTracks_) -> Void) {
+    func loadNextPage_T(status_id: UUID, href: URL?, completed: @escaping (URL?, _DataTracks_) -> Void) {
         var tracks: _DataTracks_
         tracks = _DataTracks_(platform: .Spotify)
         guard let href = href else { return }
@@ -47,8 +43,8 @@ extension _SpotifyAPI_ {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { PlaylistTracks in
-                    self.ld_max = PlaylistTracks.total
-                    self.ld_count = PlaylistTracks.offset
+                    self.arrStatus.set_max(id: status_id, ld_max: PlaylistTracks.total)
+                    self.arrStatus.set_count(id: status_id, ld_count: PlaylistTracks.offset)
                     let playlistItems_ = PlaylistTracks.items.map(\.item)
                     let playlistItems: [Track] = playlistItems_.compactMap { $0 }
                     for playlistItem in playlistItems {
@@ -63,9 +59,7 @@ extension _SpotifyAPI_ {
     
     
     func loadNextPage(currentPage: URL?, previousPage: URL?, playlists: _DataPlaylists_, completed: @escaping (_DataPlaylists_) -> Void) {
-        self.isLoading = true
         if currentPage == previousPage || currentPage == nil  {
-            self.isLoading = false
             completed(playlists)
             return
         } else {
@@ -84,8 +78,6 @@ extension _SpotifyAPI_ {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { playlistsPage in
-                    self.ld_max = playlistsPage.total
-                    self.ld_count = playlistsPage.offset
                     for playlistsItem in playlistsPage.items {
                         playlists.append(playlistsItem)
                     }
