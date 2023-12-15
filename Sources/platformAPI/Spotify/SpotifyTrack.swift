@@ -29,6 +29,7 @@ extension _SpotifyAPI_ {
 //                        self.arrStatus.delete_status(id: status_id)
 //                        completed(tracks_)
 //                    }
+                    completed(concatenatedTracks)
                 }
             )
             .store(in: &self.cancellables)
