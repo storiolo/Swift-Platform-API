@@ -6,7 +6,7 @@
 import Foundation
 
 public class _arrStatus_: ObservableObject {
-    @Published var status: [_Status_] = []
+    @Published public var status: [_Status_] = []
     
     public struct _Status_: Identifiable, Hashable {
         public var id = UUID()
