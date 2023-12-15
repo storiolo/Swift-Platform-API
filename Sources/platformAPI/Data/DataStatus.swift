@@ -23,11 +23,13 @@ public class _arrStatus_: ObservableObject {
     
     public func add_status(text: String, ld_max: Int) -> UUID {
         status.append(_Status_(text: text, ld_max: ld_max))
-        let index = status.count-1
+        let id = status[status.count-1].id
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.status[index].isLoading = true
+            if let ind = self.find_status(id: id) {
+                self.status[ind].isLoading = true
+            }
         }
-        return status[index].id
+        return id
     }
     
     public func find_status(id: UUID) -> Int? {
