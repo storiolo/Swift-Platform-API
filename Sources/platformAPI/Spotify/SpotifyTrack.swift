@@ -11,6 +11,7 @@ extension _SpotifyAPI_ {
     public func getAllTracks(playlist_id: String, completed: @escaping (_DataTracks_) -> Void) {
         var concatenatedTracks: _DataTracks_
         concatenatedTracks = _DataTracks_(platform: .Spotify, uri: playlist_id)
+        let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: 0)
         api.playlistTracks(playlist_id, offset: 0)
             .extendPagesConcurrently(api)
             .receive(on: DispatchQueue.main)
@@ -24,12 +25,11 @@ extension _SpotifyAPI_ {
                         concatenatedTracks.append(playlistItem)
                     }
                     
-                    let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: PlaylistTracks.total)
-//                    self.loadNextPage_Tracks(status_id: status_id, currentPage: PlaylistTracks.next, previousPage: nil, tracks: concatenatedTracks){ tracks_ in
-//                        self.arrStatus.delete_status(id: status_id)
-//                        completed(tracks_)
-//                    }
-                    completed(concatenatedTracks)
+                    self.arrStatus.set_max(id: status_id, ld_max: PlaylistTracks.total)
+                    self.loadNextPage_Tracks(status_id: status_id, currentPage: PlaylistTracks.next, previousPage: nil, tracks: concatenatedTracks){ tracks_ in
+                        self.arrStatus.delete_status(id: status_id)
+                        completed(tracks_)
+                    }
                 }
             )
             .store(in: &self.cancellables)
