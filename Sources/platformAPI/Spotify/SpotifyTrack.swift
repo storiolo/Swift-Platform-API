@@ -25,6 +25,7 @@ extension _SpotifyAPI_ {
                     }
                     
                     let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: 0)
+                    print(self.arrStatus.status.count)
                     self.loadNextPage_Tracks(status_id: status_id, currentPage: PlaylistTracks.next, previousPage: nil, tracks: concatenatedTracks){ tracks_ in
                         self.arrStatus.delete_status(id: status_id)
                         completed(tracks_)
