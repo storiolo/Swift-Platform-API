@@ -43,7 +43,6 @@ extension _SpotifyAPI_ {
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { PlaylistTracks in
-                    self.arrStatus.set_max(id: status_id, ld_max: PlaylistTracks.total)
                     self.arrStatus.set_count(id: status_id, ld_count: PlaylistTracks.offset)
                     let playlistItems_ = PlaylistTracks.items.map(\.item)
                     let playlistItems: [Track] = playlistItems_.compactMap { $0 }
