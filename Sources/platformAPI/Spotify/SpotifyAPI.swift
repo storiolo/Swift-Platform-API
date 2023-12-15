@@ -74,6 +74,7 @@ public class _SpotifyAPI_: ObservableObject, API {
 
     @Published var arrStatus = _arrStatus_()
     public func getfuncStatus() -> [_arrStatus_._Status_] {
+        print(arrStatus.status.count)
         return arrStatus.status
     }
     
