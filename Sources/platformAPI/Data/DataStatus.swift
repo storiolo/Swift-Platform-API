@@ -8,6 +8,10 @@ import Foundation
 public class _arrStatus_: ObservableObject {
     @Published public var status: [_Status_] = []
     
+    public init() {
+        self.status = []
+    }
+    
     public struct _Status_: Identifiable, Hashable {
         public var id = UUID()
         public var isLoading: Bool = false
