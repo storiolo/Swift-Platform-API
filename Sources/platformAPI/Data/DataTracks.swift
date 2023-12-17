@@ -136,7 +136,19 @@ public class _DataTracks_: ObservableObject {
         }
         return nil
     }
-    
+    public func search(search: String) -> _DataTracks_ {
+        if search.isEmpty {
+            return self
+        }
+        
+        let new = _DataTracks_(platform: self.platform)
+        for track in tracks {
+            if track.title.lowercased().contains(search.lowercased()) || track.artist.lowercased().contains(search.lowercased()) {
+                new.tracks.append(track)
+            }
+        }
+        return new
+    }
     
     
     //<<---- SAVE ---->>\\
