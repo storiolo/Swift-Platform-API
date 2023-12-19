@@ -87,4 +87,13 @@ public class _arrStatus_: ObservableObject {
             }
         }
     }
+    
+    public func set_text(id: UUID, text: String) {
+        for (it, statu) in status.enumerated() {
+            if statu.id == id {
+                status[it].text = text
+                break
+            }
+        }
+    }
 }
