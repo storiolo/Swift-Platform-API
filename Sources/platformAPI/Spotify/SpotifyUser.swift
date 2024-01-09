@@ -87,8 +87,6 @@ extension _SpotifyAPI_ {
                     self.loadNextPage(currentPage: playlistsPage.next, previousPage: nil, playlists: playlists){ tracks_ in
                         completed(tracks_)
                     }
-                    
-                    completed(playlists)
                 }
             )
             .store(in: &cancellables)
