@@ -96,7 +96,9 @@ extension _SpotifyAPI_ {
                     .sink(
                         receiveCompletion: { _ in },
                         receiveValue: { image in
-                            tracks.tracks[index].image = image
+                            if index < tracks.tracks.count {
+                                tracks.tracks[index].image = image
+                            }
                             completed()
                         }
                     )
@@ -113,7 +115,9 @@ extension _SpotifyAPI_ {
                     .sink(
                         receiveCompletion: { _ in },
                         receiveValue: { image in
-                            playlists.playlists[index].image = image
+                            if index < playlists.playlists.count {
+                                playlists.playlists[index].image = image
+                            }
                             completed()
                         }
                     )
