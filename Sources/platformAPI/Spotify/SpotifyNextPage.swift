@@ -63,7 +63,9 @@ extension _SpotifyAPI_ {
             return
         } else {
             loadNextPage_P(href: currentPage) { url, playlists_ in
-                self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_, completed: completed) //current page become nextpage
+                self.loadNextPage(currentPage: url, previousPage: currentPage, playlists: playlists+playlists_){ result in
+                    return
+                } //current page become nextpage
             }
         }
     }
