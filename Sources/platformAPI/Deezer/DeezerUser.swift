@@ -82,6 +82,19 @@ extension _DeezerAPI_ {
         }
     }
     
+    public func getAllUserTracks(index: Int, completed: @escaping (_DataTracks_) -> Void){
+        deezer.getAllUserTracks(index: index){ results in
+            var tracks: _DataTracks_
+            tracks = _DataTracks_(platform: .Deezer)
+            if let results = results?.data {
+                for result in results {
+                    tracks.append(result)
+                }
+            }
+            completed(tracks)
+        }
+    }
+    
     public func updateHistory(tracks: _DataTracks_, completed: @escaping () -> Void) {
         self.getHistory(){ results in
             if results == tracks {

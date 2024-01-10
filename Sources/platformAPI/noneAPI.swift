@@ -135,6 +135,11 @@ public class _NoAPI_: ObservableObject, API {
         completed(_DataTracks_(platform: .None))
     }
     
+    public func getAllUserTracks(index: Int, completed: @escaping (_DataTracks_) -> Void) {
+        print("API: No API Selected")
+        completed(_DataTracks_(platform: .None))
+    }
+    
     public func updateHistory(tracks: _DataTracks_, completed: @escaping () -> Void) {
         print("API: No API Selected")
         completed()

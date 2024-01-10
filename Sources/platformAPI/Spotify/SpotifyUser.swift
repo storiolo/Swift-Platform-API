@@ -117,6 +117,30 @@ extension _SpotifyAPI_ {
             .store(in: &self.cancellables)
     }
     
+    public func getAllUserTracks(index: Int, completed: @escaping (_DataTracks_) -> Void) {
+        var concatenatedTracks: _DataTracks_
+        concatenatedTracks = _DataTracks_(platform: .Spotify)
+        api.currentUserSavedTracks(limit: 50, offset: index)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { PlaylistTracks in
+                    let playlistItems = PlaylistTracks.items.map(\.item)
+                    for playlistItem in playlistItems {
+                        if playlistItem.isLocal { continue }
+                        concatenatedTracks.append(playlistItem)
+                    }
+                    
+                    let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: PlaylistTracks.total)
+                    self.loadNextPage_User(status_id: status_id, currentPage: PlaylistTracks.next, previousPage: nil, tracks: concatenatedTracks){ tracks_ in
+                        self.arrStatus.delete_status(id: status_id)
+                        completed(tracks_)
+                    }
+                }
+            )
+            .store(in: &self.cancellables)
+    }
+    
     
     public func updateHistory(tracks: _DataTracks_, completed: @escaping () -> Void) {
         self.getHistory(){ results in
