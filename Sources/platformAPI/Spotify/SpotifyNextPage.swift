@@ -32,6 +32,26 @@ extension _SpotifyAPI_ {
         }
     }
     
+    func loadNextPage_User(status_id: UUID, currentPage: URL?, previousPage: URL?, tracks: _DataTracks_, until: _DataTracks_? = nil, completed: @escaping (_DataTracks_) -> Void) {
+        if currentPage == previousPage || currentPage == nil  {
+            completed(tracks)
+            return
+        } else {
+            loadNextPage_T(status_id: status_id, href: currentPage) { url, tracks_ in
+                if let until = until{
+                    for item in tracks_.tracks {
+                        if item.uri == until.tracks.first?.uri {
+                            completed(tracks)
+                            return
+                        }
+                        tracks.tracks.append(item)
+                    }
+                }
+                self.loadNextPage_User(status_id: status_id, currentPage: url, previousPage: currentPage, tracks: tracks+tracks_, completed: completed) //current page become nextpage
+            }
+        }
+    }
+    
     
     func loadNextPage_T(status_id: UUID, href: URL?, completed: @escaping (URL?, _DataTracks_) -> Void) {
         var tracks: _DataTracks_

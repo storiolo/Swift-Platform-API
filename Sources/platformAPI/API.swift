@@ -38,6 +38,7 @@ public protocol API {
     func getUserCurrentSong(lastTrack: _DataTracks_, completed: @escaping (_DataTracks_) -> Void)
     func getAllUserTracks(completed: @escaping (_DataTracks_) -> Void)
     func getAllUserTracks(index: Int, completed: @escaping (_DataTracks_) -> Void)
+    func getAllUserTracks(until: _DataTracks_, completed: @escaping (_DataTracks_) -> Void)
     func updateHistory(tracks: _DataTracks_, completed: @escaping () -> Void)
     func getHistory(completed: @escaping (_DataTracks_) -> Void)
     func getAllPlaylistsOfUser(user_id: String, completed: @escaping (_DataPlaylists_) -> Void)
