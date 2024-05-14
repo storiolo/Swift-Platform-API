@@ -52,9 +52,9 @@ extension _SpotifyAPI_ {
             
             if !tmpIndex.isEmpty {
                 //Load artists
-                var index = index
+                var index_ = 0
                 let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: tmpArtists_arr.count)
-                loadNext(currentIndex: 0)
+                loadNext(currentIndex: index)
                 func loadNext(currentIndex: Int){
                     guard currentIndex < tmpArtists_arr.count else {
                         self.arrStatus.delete_status(id: status_id)
@@ -71,8 +71,8 @@ extension _SpotifyAPI_ {
                             receiveValue: { artists in
                                 for artist in artists {
                                     if let genres = artist?.genres {
-                                        tracks.tracks[tmpIndex[index]].genres = genres.joined(separator: " / ")
-                                        index += 1
+                                        tracks.tracks[tmpIndex[index_]].genres = genres.joined(separator: " / ")
+                                        index_ += 1
                                     }
                                 }
                                 loadNext(currentIndex: currentIndex+1)
