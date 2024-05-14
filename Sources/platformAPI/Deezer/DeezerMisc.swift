@@ -50,9 +50,9 @@ extension _DeezerAPI_ {
             }
         }
     }
-    public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
+    public func getSongsGenres(index: Int, tracks: _DataTracks_, completed: @escaping () -> Void) {
         let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: tracks.tracks.count)
-        get(index: 0)
+        get(index: index)
         func get(index: Int){
             guard index < tracks.tracks.count else {
                 self.arrStatus.delete_status(id: status_id)

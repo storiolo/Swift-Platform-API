@@ -30,7 +30,7 @@ extension _SpotifyAPI_ {
             completed()
         }
     }
-    public func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void) {
+    public func getSongsGenres(index: Int, tracks: _DataTracks_, completed: @escaping () -> Void) {
         if tracks.tracks.count > 0 {
             
             //retrieve only tracks with empty genres
@@ -52,7 +52,7 @@ extension _SpotifyAPI_ {
             
             if !tmpIndex.isEmpty {
                 //Load artists
-                var index = 0
+                var index = index
                 let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: tmpArtists_arr.count)
                 loadNext(currentIndex: 0)
                 func loadNext(currentIndex: Int){

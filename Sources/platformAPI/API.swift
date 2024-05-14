@@ -55,7 +55,7 @@ public protocol API {
     func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void)
         //Not available in Deezer
     func getSongGenres(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
-    func getSongsGenres(tracks: _DataTracks_, completed: @escaping () -> Void)
+    func getSongsGenres(index: Int, tracks: _DataTracks_, completed: @escaping () -> Void)
     func getSongInfo(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
     func getSongAnalysis(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
     
