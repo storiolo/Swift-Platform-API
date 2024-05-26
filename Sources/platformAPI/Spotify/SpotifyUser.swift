@@ -153,6 +153,12 @@ extension _SpotifyAPI_ {
                     for playlistItem in playlistItems {
                         if playlistItem.isLocal { continue }
                         concatenatedTracks.append(playlistItem)
+
+                        if playlistItem.uri == until.tracks.first?.uri {
+                            until.append(playlistItem)
+                            completed(until)
+                            return
+                        }
                     }
                     
                     let status_id = self.arrStatus.add_status(text: "Loading Songs", ld_max: PlaylistTracks.total)
