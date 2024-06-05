@@ -155,7 +155,9 @@ extension _SpotifyAPI_ {
                         concatenatedTracks.append(playlistItem)
 
                         if playlistItem.uri == until.tracks.first?.uri {
-                            until.append(playlistItem)
+                            for (it, item) in concatenatedTracks.tracks.enumerated() {
+                                until.tracks.insert(item, at: it)
+                            }
                             completed(until)
                             return
                         }
