@@ -154,10 +154,7 @@ extension _SpotifyAPI_ {
                         if playlistItem.isLocal { continue }
 
                         if playlistItem.uri == until.tracks.first?.uri {
-                            for (it, item) in concatenatedTracks.tracks.enumerated() {
-                                until.tracks.insert(item, at: it)
-                            }
-                            completed(until)
+                            completed(concatenatedTracks)
                             return
                         } else {
                             concatenatedTracks.append(playlistItem)
