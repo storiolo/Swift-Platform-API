@@ -152,7 +152,6 @@ extension _SpotifyAPI_ {
                     let playlistItems = PlaylistTracks.items.map(\.item)
                     for playlistItem in playlistItems {
                         if playlistItem.isLocal { continue }
-                        concatenatedTracks.append(playlistItem)
 
                         if playlistItem.uri == until.tracks.first?.uri {
                             for (it, item) in concatenatedTracks.tracks.enumerated() {
@@ -160,6 +159,8 @@ extension _SpotifyAPI_ {
                             }
                             completed(until)
                             return
+                        } else {
+                            concatenatedTracks.append(playlistItem)
                         }
                     }
                     
