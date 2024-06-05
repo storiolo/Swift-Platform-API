@@ -37,18 +37,18 @@ extension _SpotifyAPI_ {
     
 
     public func getTrack(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
-        self.getTrack(uri: tracks.tracks[index].uri){ track in
+        self.getTrack(id: tracks.tracks[index].uri){ track in
             tracks.tracks[index] = track
             completed()
         }
     }
-    public func getTrack(uri: String, completed: @escaping (_DataTracks_._track_) -> Void) {
-        api.track(uri)
+    public func getTrack(id: String, completed: @escaping (_track_) -> Void) {
+        api.track(id)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { track in
-                    completed(_DataTracks_._track_(track: track))
+                    completed(_track_(track: track))
                 }
             )
             .store(in: &cancellables)

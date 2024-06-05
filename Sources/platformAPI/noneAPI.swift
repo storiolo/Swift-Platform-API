@@ -37,6 +37,11 @@ public class _NoAPI_: ObservableObject, API {
         print("API: No API Selected")
     }
     
+    public func getTrack(id: String, completed: @escaping (_track_) -> Void) {
+        print("API: No API Selected")
+        completed(_track_())
+    }
+    
     public func getImageAlbum(playlists: _DataPlaylists_, index: Int, completed: @escaping () -> Void) {
         print("API: No API Selected")
     }

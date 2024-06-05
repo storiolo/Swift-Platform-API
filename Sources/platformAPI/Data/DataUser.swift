@@ -8,31 +8,32 @@ import SwiftUI
 import SpotifyWebAPI
 import DeezerAPI
 
+public struct _user_: Identifiable {
+    public var id = UUID()
+    
+    public var uri: String
+    public var displayName: String
+    public var image: Image?
+    
+    public init(platform: platform){
+        self.displayName = "N/A"
+        self.uri = ""
+    }
+    
+    public init(_ user: DeezerUser){
+        self.displayName = user.name ?? "N/A"
+        self.uri = String(user.id ?? 0)
+    }
+    public init(_ user: SpotifyUser){
+        self.displayName = user.displayName ?? "N/A"
+        self.uri = user.uri
+    }
+}
+
+
 public class _DataUsers_: ObservableObject {
     public var platform: platform
     @Published public var users: [_user_] = []
-    
-    public struct _user_: Identifiable {
-        public var id = UUID()
-        
-        public var uri: String
-        public var displayName: String
-        public var image: Image?
-        
-        public init(platform: platform){
-            self.displayName = "N/A"
-            self.uri = ""
-        }
-        
-        public init(_ user: DeezerUser){
-            self.displayName = user.name ?? "N/A"
-            self.uri = String(user.id ?? 0)
-        }
-        public init(_ user: SpotifyUser){
-            self.displayName = user.displayName ?? "N/A"
-            self.uri = user.uri
-        }
-    }
     
     public init(platform: platform) {
         self.platform = platform

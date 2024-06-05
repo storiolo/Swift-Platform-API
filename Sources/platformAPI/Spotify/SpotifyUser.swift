@@ -221,7 +221,7 @@ extension _SpotifyAPI_ {
                         return
                     }
                     
-                    self.getTrack(uri: uri){ track in
+                    self.getTrack(id: uri){ track in
                         tracks.tracks.append(track)
                         completed(tracks)
                     }

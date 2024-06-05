@@ -183,7 +183,7 @@ extension _SpotifyAPI_ {
                  receiveCompletion: { _ in },
                  receiveValue: { playlistsItem in
 
-                     playlists.playlists.append(_DataPlaylists_._playlist_(
+                     playlists.playlists.append(_playlist_(
                          title: playlistsItem.name,
                          uri: playlistsItem.uri,
                          image_uri: playlistsItem.images.largest?.url.absoluteString ?? "",

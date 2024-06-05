@@ -9,70 +9,85 @@ import SpotifyWebAPI
 import DeezerAPI
 
 
+public struct _track_: Identifiable {
+    public var id = UUID()
+    
+    //Saved
+    public var title: String
+    public var artist: String
+    public var uri: String
+    public var artist_uri: String
+    public var preview_uri: String
+    public var image_uri: String
+    public var genres: String
+    
+    //Others
+    public var image: Image?
+    
+    //Only available on Spotify
+    public var features: AudioFeatures?
+    public var analysis: AudioAnalysis?
+    
+    public init(track: Track){
+        self.title = track.name
+        self.artist = track.artists?.first?.name ?? ""
+        self.artist_uri = track.artists?.first?.uri ?? ""
+        self.image_uri = track.album?.images?.largest?.url.absoluteString ?? ""
+        self.uri = track.uri ?? ""
+        self.image = nil
+        self.genres = ""
+        self.features = nil
+        self.analysis = nil
+        self.preview_uri = track.previewURL?.absoluteString ?? ""
+    }
+    
+    public init(track: DeezerTrack){
+        self.title = track.title ?? ""
+        self.artist = track.artist?.name ?? ""
+        self.artist_uri = String(track.artist?.id ?? 0)
+        self.image_uri = track.album?.cover_xl ?? ""
+        self.uri = String(track.id ?? 0)
+        self.image = nil
+        self.genres = ""
+        self.features = nil
+        self.analysis = nil
+        self.preview_uri = track.preview ?? ""
+    }
+    
+    public init(title: String, artist: String, uri: String, artist_uri: String, preview_uri: String, image_uri: String, genres: String){
+        self.title = title
+        self.artist = artist
+        self.artist_uri = artist_uri
+        self.image_uri = image_uri
+        self.uri = uri
+        self.image = nil
+        self.genres = genres
+        self.features = nil
+        self.analysis = nil
+        self.preview_uri = preview_uri
+    }
+    
+    public init(){
+        self.title = ""
+        self.artist = ""
+        self.artist_uri = ""
+        self.image_uri = ""
+        self.uri = ""
+        self.image = nil
+        self.genres = ""
+        self.features = nil
+        self.analysis = nil
+        self.preview_uri = ""
+    }
+}
+
+
+
 public class _DataTracks_: ObservableObject {
     public var platform: platform
     public var name: String
     public var uri: String
     @Published public var tracks: [_track_] = []
-    
-    public struct _track_: Identifiable {
-        public var id = UUID()
-        
-        //Saved
-        public var title: String
-        public var artist: String
-        public var uri: String
-        public var artist_uri: String
-        public var preview_uri: String
-        public var image_uri: String
-        public var genres: String
-        
-        //Others
-        public var image: Image?
-        
-        //Only available on Spotify
-        public var features: AudioFeatures?
-        public var analysis: AudioAnalysis?
-        
-        public init(track: Track){
-            self.title = track.name
-            self.artist = track.artists?.first?.name ?? ""
-            self.artist_uri = track.artists?.first?.uri ?? ""
-            self.image_uri = track.album?.images?.largest?.url.absoluteString ?? ""
-            self.uri = track.uri ?? ""
-            self.image = nil
-            self.genres = ""
-            self.features = nil
-            self.analysis = nil
-            self.preview_uri = track.previewURL?.absoluteString ?? ""
-        }
-        
-        public init(track: DeezerTrack){
-            self.title = track.title ?? ""
-            self.artist = track.artist?.name ?? ""
-            self.artist_uri = String(track.artist?.id ?? 0)
-            self.image_uri = track.album?.cover_xl ?? ""
-            self.uri = String(track.id ?? 0)
-            self.image = nil
-            self.genres = ""
-            self.features = nil
-            self.analysis = nil
-            self.preview_uri = track.preview ?? ""
-        }
-        
-        public init(title: String, artist: String, uri: String, artist_uri: String, preview_uri: String, image_uri: String, genres: String){
-            self.title = title
-            self.artist = artist
-            self.artist_uri = artist_uri
-            self.image_uri = image_uri
-            self.uri = uri
-            self.image = nil
-            self.genres = genres
-            self.features = nil
-            self.analysis = nil
-            self.preview_uri = preview_uri
-        }
-    }
     
     
     public init(platform: platform, name: String = "None", uri: String = "") {
@@ -148,49 +163,6 @@ public class _DataTracks_: ObservableObject {
             }
         }
         return new
-    }
-    
-    
-    //<<---- SAVE ---->>\\
-    public func saveDatabase() {
-        let trackProperties = ["title", "artist", "uri", "artist_uri", "preview_uri", "image_uri", "genres"]
-        for property in trackProperties {
-            let values = tracks.map { track in
-                let mirror = Mirror(reflecting: track)
-                for case let (label?, value) in mirror.children where label == property {
-                    return value
-                }
-                return ""
-            }
-            UserDefaults.standard.set(values, forKey: property)
-        }
-        UserDefaults.standard.set(self.platform.rawValue, forKey: "platform")
-        print("Data Saved!")
-    }
-    
-    public func loadDatabase(completed: @escaping () -> Void) {
-        guard let platform = UserDefaults.standard.string(forKey: "platform"),
-              let title = UserDefaults.standard.array(forKey: "title") as? [String],
-              let artist = UserDefaults.standard.array(forKey: "artist") as? [String],
-              let uri = UserDefaults.standard.array(forKey: "uri") as? [String],
-              let artist_uri = UserDefaults.standard.array(forKey: "artist_uri") as? [String],
-              let preview_uri = UserDefaults.standard.array(forKey: "preview_uri") as? [String],
-              let image_uri = UserDefaults.standard.array(forKey: "image_uri") as? [String],
-              let genres = UserDefaults.standard.array(forKey: "genres") as? [String] else {
-            completed()
-            return
-        }
-        
-        tracks = []
-        self.name = "DataBase"
-        self.platform = platform == "Spotify" ? .Spotify : .Deezer
-        for i in 0..<artist.count {
-            tracks.append(_track_(title: title[i], artist: artist[i], uri: uri[i],
-                                artist_uri: artist_uri[i], preview_uri: preview_uri[i], image_uri: image_uri[i], genres: genres[i]))
-        }
-        completed()
-        
-        print("Data Loaded!")
     }
     
 }

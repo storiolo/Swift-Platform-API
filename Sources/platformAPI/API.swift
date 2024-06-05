@@ -48,6 +48,7 @@ public protocol API {
     //<<---- Track ---->>\\
     func getAllTracks(playlist_id: String, completed: @escaping (_DataTracks_) -> Void)
     func getTrack(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
+    func getTrack(id: String, completed: @escaping (_track_) -> Void)
     
     
     //<<---- Misc ---->>\\

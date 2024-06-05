@@ -66,7 +66,7 @@ extension _SpotifyAPI_ {
                         
                         let track = SpotifyQueue.queue[index]
                         if let uri = track.uri {
-                            self.getTrack(uri: uri){ track in
+                            self.getTrack(id: uri){ track in
                                 tracks.tracks.append(track)
                                 loadTracks(index: index + 1)
                             }

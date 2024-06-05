@@ -25,9 +25,16 @@ extension _DeezerAPI_ {
     public func getTrack(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
         deezer.getTrack(track_id: tracks.tracks[index].uri){ result in
             if let result = result {
-                tracks.tracks[index] = _DataTracks_._track_(track: result)
+                tracks.tracks[index] = _track_(track: result)
             }
             completed()
+        }
+    }
+    public func getTrack(id: String, completed: @escaping (_track_) -> Void) {
+        deezer.getTrack(track_id: id){ result in
+            if let result = result {
+                completed(_track_(track: result))
+            }
         }
     }
 }
