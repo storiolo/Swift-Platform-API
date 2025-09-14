@@ -120,6 +120,12 @@ public class _NoAPI_: ObservableObject, API {
         completed(_DataUsers_(platform: .None))
     }
     
+    public func getUsers(user_ids: [String], completed: @escaping (_DataUsers_) -> Void) {
+        print("API: No API Selected")
+        completed(_DataUsers_(platform: .None))
+    }
+    
+    
     public func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void) {
          print("API: No API Selected")
          completed(_DataPlaylists_(platform: .None))

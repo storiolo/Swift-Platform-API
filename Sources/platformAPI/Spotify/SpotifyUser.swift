@@ -69,6 +69,51 @@ extension _SpotifyAPI_ {
             .store(in: &cancellables)
     }
     
+    public func getUsers(user_ids: [String], completed: @escaping (_DataUsers_) -> Void) {
+        var dataUsers: _DataUsers_
+        dataUsers = _DataUsers_(platform: .Spotify)
+        let group = DispatchGroup()
+        
+        for userId in user_ids {
+            group.enter()
+            
+            self.api.userProfile(userId)
+                .receive(on: DispatchQueue.main)
+                .sink(
+                    receiveCompletion: { _ in
+                        group.leave()
+                    },
+                    receiveValue: { user in
+                        var newUser = _user_(platform: .Spotify)
+                        
+                        if let url = user.images?.first?.url {
+                            let spotifyImage = SpotifyImage(url: url)
+                            spotifyImage.load()
+                                .receive(on: DispatchQueue.main)
+                                .sink(
+                                    receiveCompletion: { _ in },
+                                    receiveValue: { image in
+                                        newUser.image = image
+                                    }
+                                )
+                                .store(in: &self.cancellables)
+                        }
+                        
+                        dataUsers.users.append(newUser)
+                        group.leave()
+                    }
+                )
+                .store(in: &cancellables)
+        }
+        
+        group.notify(queue: .main) {
+            completed(dataUsers)
+        }
+    }
+
+    
+    
+    
     
     public func getAllUserPlaylists(completed: @escaping (_DataPlaylists_) -> Void) {
         var playlists: _DataPlaylists_

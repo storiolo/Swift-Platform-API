@@ -34,6 +34,7 @@ public protocol API {
     //<<---- User ---->>\\
     func getUser(completed: @escaping (_DataUsers_) -> Void)
     func getUser(user_id: String, completed: @escaping (_DataUsers_) -> Void)
+    func getUsers(user_ids: [String], completed: @escaping (_DataUsers_) -> Void)
     func getAllUserPlaylists(completed: @escaping (_DataPlaylists_) -> Void)
     func getUserCurrentSong(lastTrack: _DataTracks_, completed: @escaping (_DataTracks_) -> Void)
     func getAllUserTracks(completed: @escaping (_DataTracks_) -> Void)

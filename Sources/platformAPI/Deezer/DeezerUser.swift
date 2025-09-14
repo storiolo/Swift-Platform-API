@@ -51,6 +51,41 @@ extension _DeezerAPI_ {
         }
     }
     
+    public func getUsers(user_ids: [String], completed: @escaping (_DataUsers_) -> Void) {
+        var dataUsers: _DataUsers_
+        dataUsers = _DataUsers_(platform: .Deezer)
+        let group = DispatchGroup()
+
+        for userId in user_ids {
+            group.enter()
+            
+            deezer.getaUser(user_id: userId) { user in
+                if let user = user {
+                    var newUser = _user_(platform: .Spotify)
+                    
+                    if let url = user.picture {
+                        self.deezer.getImageAlbum(coverURL: url) { image in
+                            newUser.image = image
+                            dataUsers.users.append(newUser)
+                            group.leave()
+                        }
+                    } else {
+                        dataUsers.users.append(newUser)
+                        group.leave()
+                    }
+                } else {
+                    group.leave()
+                }
+            }
+        }
+        
+        group.notify(queue: .main) {
+            completed(dataUsers)
+        }
+    }
+
+    
+    
     public func getAllUserPlaylists(completed: @escaping (_DataPlaylists_) -> Void){
         deezer.getAllUserPlaylists(){ results in
             var playlists: _DataPlaylists_
