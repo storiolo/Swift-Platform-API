@@ -53,34 +53,19 @@ extension _DeezerAPI_ {
     
     public func getUsers(user_ids: [String], completed: @escaping (_DataUsers_) -> Void) {
         var dataUsers: _DataUsers_
-        dataUsers = _DataUsers_(platform: .Deezer)
-        let group = DispatchGroup()
+        dataUsers = _DataUsers_(platform: .Spotify)
 
-        for userId in user_ids {
-            group.enter()
-            
-            deezer.getaUser(user_id: userId) { user in
-                if let user = user {
-                    var newUser = _user_(platform: .Spotify)
-                    
-                    if let url = user.picture {
-                        self.deezer.getImageAlbum(coverURL: url) { image in
-                            newUser.image = image
-                            dataUsers.users.append(newUser)
-                            group.leave()
-                        }
-                    } else {
-                        dataUsers.users.append(newUser)
-                        group.leave()
-                    }
-                } else {
-                    group.leave()
-                }
+        openNextUser(currentIndex: 0)
+        func openNextUser(currentIndex: Int){
+            guard currentIndex < user_ids.count else {
+                completed(dataUsers)
+                return
             }
-        }
-        
-        group.notify(queue: .main) {
-            completed(dataUsers)
+            
+            getUser(user_id: user_ids[currentIndex]){ result in
+                dataUsers += result
+                openNextUser(currentIndex: currentIndex+1)
+            }
         }
     }
 
