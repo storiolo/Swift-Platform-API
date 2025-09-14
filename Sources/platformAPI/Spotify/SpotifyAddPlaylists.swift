@@ -19,7 +19,7 @@ extension _SpotifyAPI_ {
     
     public func createPlaylist(title: String, completed: @escaping (String) -> Void) {
         self.getUser(){ user in
-            self.api.createPlaylist(for: user.users[0].uri, PlaylistDetails(name: title))
+            self.api.createPlaylist(for: user.uri, PlaylistDetails(name: title))
                 .receive(on: DispatchQueue.main)
                 .sink(
                     receiveCompletion: { _ in },

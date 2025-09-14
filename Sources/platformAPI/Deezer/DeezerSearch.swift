@@ -8,43 +8,41 @@ import SwiftUI
 import DeezerAPI
 
 extension _DeezerAPI_ {
-    public func SearchPlaylist(search: String, completed: @escaping (_DataPlaylists_) -> Void){
+    public func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void){
         self.SearchPlaylist(search: search, max: 10, completed: completed)
     }
-    public func SearchPlaylist(search: String, max: Int, completed: @escaping (_DataPlaylists_) -> Void){
+    public func SearchPlaylist(search: String, max: Int, completed: @escaping ([_playlist_]) -> Void){
         deezer.SearchPlaylist(search: search, max: max){ results in
-            var playlists: _DataPlaylists_
-            playlists = _DataPlaylists_(platform: .Deezer)
+            var playlists: [_playlist_] = []
+            
             if let results = results?.data {
                 for result in results {
-                    playlists.append(result)
+                    playlists.append(_playlist_( result))
                 }
             }
             completed(playlists)
         }
     }
-    public func SearchTrack(search: String, completed: @escaping (_DataTracks_) -> Void){
+    public func SearchTrack(search: String, completed: @escaping ([_track_]) -> Void){
         deezer.SearchTrack(search: search){ results in
-            var tracks: _DataTracks_
-            tracks = _DataTracks_(platform: .Deezer)
+            var tracks: [_track_] = []
             if let results = results?.data {
                 for result in results {
-                    tracks.append(result)
+                    tracks.append(_track_( result))
                 }
             }
             completed(tracks)
         }
     }
-    public func SearchUser(search: String, completed: @escaping (_DataUsers_) -> Void){
+    public func SearchUser(search: String, completed: @escaping ([_user_]) -> Void){
         deezer.SearchUser(search: search){ results in
-            var users: _DataUsers_
-            users = _DataUsers_(platform: .Deezer)
+            var users: [_user_] = []
             if let results = results?.data {
                 for (index, result) in results.enumerated() {
-                    users.append(result)
+                    users.append(_user_(result))
                     if let url = result.picture {
                         self.deezer.getImageAlbum(coverURL: url) { image in
-                            users.users[index].image = image
+                            users[index].image = image
                             completed(users)
                         }
                     } else {

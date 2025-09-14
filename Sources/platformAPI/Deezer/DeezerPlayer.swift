@@ -20,14 +20,17 @@ extension _DeezerAPI_ {
     public func Previous(){
         print("Not Available on Deezer")
     }
-    public func UserQueue(completed: @escaping (_DataTracks_) -> Void){
+    public func UserQueue(completed: @escaping ([_track_]) -> Void){
         print("Not Available on Deezer")
-        completed(_DataTracks_(platform: .Deezer))
+        completed([_track_]())
     }
     public func AddToUserQueue(track_id: String){
         print("Not Available on Deezer")
     }
     public func Play(tracks_id: [String]){
+        print("Not Available on Deezer")
+    }
+    public func Play(track_id: String){
         print("Not Available on Deezer")
     }
 }

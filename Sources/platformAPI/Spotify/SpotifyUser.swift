@@ -7,25 +7,24 @@ import Foundation
 import SpotifyWebAPI
 
 extension _SpotifyAPI_ {
-    public func getUser(completed: @escaping (_DataUsers_) -> Void) {
+
+    public func getUser(completed: @escaping (_user_) -> Void) {
         self.api.currentUserProfile()
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { user in
-                    var datauser: _DataUsers_
-                    datauser = _DataUsers_(platform: .Spotify)
+                    var datauser: _user_
+                    datauser = _user_(user)
                     
                     if let url = user.images?[0].url {
-                       datauser.append(user)
-                        
                         let spotifyImage = SpotifyImage(url: url)
                         spotifyImage.load()
                             .receive(on: DispatchQueue.main)
                             .sink(
                                 receiveCompletion: { _ in },
                                 receiveValue: { image in
-                                    datauser.users[0].image = image
+                                    datauser.image = image
                                     completed(datauser)
                                 }
                             )
@@ -38,25 +37,23 @@ extension _SpotifyAPI_ {
             .store(in: &cancellables)
     }
     
-    public func getUser(user_id: String, completed: @escaping (_DataUsers_) -> Void) {
+    public func getUser(user_id: String, completed: @escaping (_user_) -> Void) {
         self.api.userProfile(user_id)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { user in
-                    var datauser: _DataUsers_
-                    datauser = _DataUsers_(platform: .Spotify)
+                    var datauser: _user_
+                    datauser = _user_(user)
                     
                     if let url = user.images?[0].url {
-                       datauser.append(user)
-                        
                         let spotifyImage = SpotifyImage(url: url)
                         spotifyImage.load()
                             .receive(on: DispatchQueue.main)
                             .sink(
                                 receiveCompletion: { _ in },
                                 receiveValue: { image in
-                                    datauser.users[0].image = image
+                                    datauser.image = image
                                     completed(datauser)
                                 }
                             )
@@ -69,9 +66,9 @@ extension _SpotifyAPI_ {
             .store(in: &cancellables)
     }
     
-    public func getUsers(user_ids: [String], completed: @escaping (_DataUsers_) -> Void) {
-        var dataUsers: _DataUsers_
-        dataUsers = _DataUsers_(platform: .Spotify)
+    
+    public func getUsers(user_ids: [String], completed: @escaping ([_user_]) -> Void) {
+        var dataUsers: [_user_] = []
 
         openNextUser(currentIndex: 0)
         func openNextUser(currentIndex: Int){
@@ -81,7 +78,7 @@ extension _SpotifyAPI_ {
             }
             
             getUser(user_id: user_ids[currentIndex]){ result in
-                dataUsers += result
+                dataUsers.append(result)
                 openNextUser(currentIndex: currentIndex+1)
             }
         }
@@ -91,9 +88,8 @@ extension _SpotifyAPI_ {
     
     
     
-    public func getAllUserPlaylists(completed: @escaping (_DataPlaylists_) -> Void) {
-        var playlists: _DataPlaylists_
-        playlists = _DataPlaylists_(platform: .Spotify)
+    public func getAllUserPlaylists(completed: @escaping ([_playlist_]) -> Void) {
+        var playlists: [_playlist_] = []
         
         self.api.currentUserPlaylists(limit: 50)
             .extendPages(self.api)
@@ -102,7 +98,7 @@ extension _SpotifyAPI_ {
                 receiveCompletion: { _ in },
                 receiveValue: { playlistsPage in
                     for playlistsItem in playlistsPage.items {
-                        playlists.append(playlistsItem)
+                        playlists.append(_playlist_( playlistsItem))
                     }
                     
                     self.loadNextPage(currentPage: playlistsPage.next, previousPage: nil, playlists: playlists){ tracks_ in
@@ -114,9 +110,8 @@ extension _SpotifyAPI_ {
     }
     
     
-    public func getAllUserTracks(completed: @escaping (_DataTracks_) -> Void) {
-        var concatenatedTracks: _DataTracks_
-        concatenatedTracks = _DataTracks_(platform: .Spotify)
+    public func getAllUserTracks(completed: @escaping ([_track_]) -> Void) {
+        var concatenatedTracks: [_track_] = []
         api.currentUserSavedTracks(limit: 50, offset: 0)
             .receive(on: DispatchQueue.main)
             .sink(
@@ -125,7 +120,7 @@ extension _SpotifyAPI_ {
                     let playlistItems = PlaylistTracks.items.map(\.item)
                     for playlistItem in playlistItems {
                         if playlistItem.isLocal { continue }
-                        concatenatedTracks.append(playlistItem)
+                        concatenatedTracks.append(_track_( playlistItem))
                     }
                     
                     let status_id = self.arrStatus.add_status(text: "Loading Songs", ld_max: PlaylistTracks.total)
@@ -138,9 +133,8 @@ extension _SpotifyAPI_ {
             .store(in: &self.cancellables)
     }
     
-    public func getAllUserTracks(index: Int, completed: @escaping (_DataTracks_) -> Void) {
-        var concatenatedTracks: _DataTracks_
-        concatenatedTracks = _DataTracks_(platform: .Spotify)
+    public func getAllUserTracks(index: Int, completed: @escaping ([_track_]) -> Void) {
+        var concatenatedTracks: [_track_] = []
         api.currentUserSavedTracks(limit: 50, offset: index)
             .receive(on: DispatchQueue.main)
             .sink(
@@ -149,7 +143,7 @@ extension _SpotifyAPI_ {
                     let playlistItems = PlaylistTracks.items.map(\.item)
                     for playlistItem in playlistItems {
                         if playlistItem.isLocal { continue }
-                        concatenatedTracks.append(playlistItem)
+                        concatenatedTracks.append(_track_( playlistItem))
                     }
                     
                     let status_id = self.arrStatus.add_status(text: "Loading Songs", ld_max: PlaylistTracks.total)
@@ -162,9 +156,8 @@ extension _SpotifyAPI_ {
             .store(in: &self.cancellables)
     }
     
-    public func getAllUserTracks(until: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
-        var concatenatedTracks: _DataTracks_
-        concatenatedTracks = _DataTracks_(platform: .Spotify)
+    public func getAllUserTracks(until: [_track_], completed: @escaping ([_track_]) -> Void) {
+        var concatenatedTracks: [_track_] = []
         api.currentUserSavedTracks(limit: 50, offset: 0)
             .receive(on: DispatchQueue.main)
             .sink(
@@ -174,11 +167,11 @@ extension _SpotifyAPI_ {
                     for playlistItem in playlistItems {
                         if playlistItem.isLocal { continue }
 
-                        if playlistItem.uri == until.tracks.first?.uri {
+                        if playlistItem.uri == until.first?.uri {
                             completed(concatenatedTracks)
                             return
                         } else {
-                            concatenatedTracks.append(playlistItem)
+                            concatenatedTracks.append(_track_( playlistItem))
                         }
                     }
                     
@@ -193,18 +186,8 @@ extension _SpotifyAPI_ {
     }
     
     
-    public func updateHistory(tracks: _DataTracks_, completed: @escaping () -> Void) {
-        self.getHistory(){ results in
-            if results == tracks {
-                completed()
-            } else {
-                tracks.copy(results)
-            }
-        }
-    }
-    public func getHistory(completed: @escaping (_DataTracks_) -> Void) {
-        var tracks: _DataTracks_
-        tracks = _DataTracks_(platform: .Spotify, name: "Recent")
+    public func getHistory(completed: @escaping ([_track_]) -> Void) {
+        var tracks: [_track_] = []
         api.recentlyPlayed(limit: 5)
             .receive(on: DispatchQueue.main)
             .sink(
@@ -214,19 +197,16 @@ extension _SpotifyAPI_ {
                     
                     for playlistItem in playlistItems {
                         if playlistItem.isLocal { continue }
-                        tracks.append(playlistItem)
+                        tracks.append(_track_( playlistItem))
                     }
                     completed(tracks)
                 }
             )
             .store(in: &self.cancellables)
     }
+
     
-    
-    public func getUserCurrentSong(lastTrack: _DataTracks_, completed: @escaping (_DataTracks_) -> Void) {
-        var tracks: _DataTracks_
-        tracks = _DataTracks_(platform: .Spotify, name: "Currently Playing")
-        
+    public func getUserCurrentSong(completed: @escaping (_track_) -> Void) {
         self.api.currentPlayback()
             .receive(on: DispatchQueue.main)
             .sink(
@@ -234,17 +214,10 @@ extension _SpotifyAPI_ {
                 receiveValue: { Song in
                     guard let Song = Song,
                           let uri = Song.item?.uri
-                    else { completed(tracks); return }
-                    
-                    //if track is the same as before don't continue
-                    if lastTrack.tracks.first?.uri == uri {
-                        completed(lastTrack)
-                        return
-                    }
+                    else { completed(_track_()); return }
                     
                     self.getTrack(id: uri){ track in
-                        tracks.tracks.append(track)
-                        completed(tracks)
+                        completed(track)
                     }
                 }
             )
@@ -252,9 +225,8 @@ extension _SpotifyAPI_ {
     }
     
     
-    public func getAllPlaylistsOfUser(user_id: String, completed: @escaping (_DataPlaylists_) -> Void) {
-        var playlists: _DataPlaylists_
-        playlists = _DataPlaylists_(platform: .Spotify)
+    public func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_]) -> Void) {
+        var playlists: [_playlist_] = []
         
         self.api.userPlaylists(for: user_id)
             .extendPages(self.api)
@@ -263,7 +235,7 @@ extension _SpotifyAPI_ {
                 receiveCompletion: { _ in },
                 receiveValue: { playlistsPage in
                     for playlistsItem in playlistsPage.items {
-                        playlists.append(playlistsItem)
+                        playlists.append(_playlist_( playlistsItem))
                     }
                     
                     self.loadNextPage(currentPage: playlistsPage.next, previousPage: nil, playlists: playlists){ tracks_ in
@@ -277,8 +249,8 @@ extension _SpotifyAPI_ {
     }
     
     
-    public func getFollowing(completed: @escaping (_DataUsers_) -> Void) {
+    public func getFollowing(completed: @escaping ([_user_]) -> Void) {
         print("Not Available on Spotify")
-        completed(_DataUsers_(platform: .Spotify))
+        completed([_user_]())
     }
 }

@@ -7,7 +7,7 @@ import Foundation
 import SwiftUI
 import DeezerAPI
 
-public class _DeezerAPI_: ObservableObject, API {
+public class _DeezerAPI_: ObservableObject, API {    
 
     public var deezer: DeezerAPI
     public func getPlatform() -> platform {

@@ -25,42 +25,39 @@ public protocol API {
     
     
     //<<---- Search ---->>\\
-    func SearchPlaylist(search: String, max: Int, completed: @escaping (_DataPlaylists_) -> Void)
-    func SearchPlaylist(search: String, completed: @escaping (_DataPlaylists_) -> Void)
-    func SearchTrack(search: String, completed: @escaping (_DataTracks_) -> Void)
-    func SearchUser(search: String, completed: @escaping (_DataUsers_) -> Void)
+    func SearchPlaylist(search: String, max: Int, completed: @escaping ([_playlist_]) -> Void)
+    func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void)
+    func SearchTrack(search: String, completed: @escaping ([_track_]) -> Void)
+    func SearchUser(search: String, completed: @escaping ([_user_]) -> Void)
     
     
     //<<---- User ---->>\\
-    func getUser(completed: @escaping (_DataUsers_) -> Void)
-    func getUser(user_id: String, completed: @escaping (_DataUsers_) -> Void)
-    func getUsers(user_ids: [String], completed: @escaping (_DataUsers_) -> Void)
-    func getAllUserPlaylists(completed: @escaping (_DataPlaylists_) -> Void)
-    func getUserCurrentSong(lastTrack: _DataTracks_, completed: @escaping (_DataTracks_) -> Void)
-    func getAllUserTracks(completed: @escaping (_DataTracks_) -> Void)
-    func getAllUserTracks(index: Int, completed: @escaping (_DataTracks_) -> Void)
-    func getAllUserTracks(until: _DataTracks_, completed: @escaping (_DataTracks_) -> Void)
-    func updateHistory(tracks: _DataTracks_, completed: @escaping () -> Void)
-    func getHistory(completed: @escaping (_DataTracks_) -> Void)
-    func getAllPlaylistsOfUser(user_id: String, completed: @escaping (_DataPlaylists_) -> Void)
-    func getFollowing(completed: @escaping (_DataUsers_) -> Void)
+    func getUser(completed: @escaping (_user_) -> Void)
+    func getUser(user_id: String, completed: @escaping (_user_) -> Void)
+    func getUsers(user_ids: [String], completed: @escaping ([_user_]) -> Void)
+    func getAllUserPlaylists(completed: @escaping ([_playlist_]) -> Void)
+    func getUserCurrentSong(completed: @escaping (_track_) -> Void)
+    func getAllUserTracks(completed: @escaping ([_track_]) -> Void)
+    func getAllUserTracks(index: Int, completed: @escaping ([_track_]) -> Void)
+    func getAllUserTracks(until: [_track_], completed: @escaping ([_track_]) -> Void)
+    func getHistory(completed: @escaping ([_track_]) -> Void)
+    func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_]) -> Void)
+    func getFollowing(completed: @escaping ([_user_]) -> Void)
     
     
     //<<---- Track ---->>\\
-    func getAllTracks(playlist_id: String, completed: @escaping (_DataTracks_) -> Void)
-    func getTrack(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
+    func getAllTracks(playlist_id: String, completed: @escaping ([_track_]) -> Void)
     func getTrack(id: String, completed: @escaping (_track_) -> Void)
+    func getTracks(id: [String], completed: @escaping ([_track_]) -> Void)
     
     
     //<<---- Misc ---->>\\
-    func getImageAlbum(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
-    func getImageAlbum(playlists: _DataPlaylists_, index: Int, completed: @escaping () -> Void)
-    func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void)
-        //Not available in Deezer
-    func getSongGenres(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
-    func getSongsGenres(index: Int, tracks: _DataTracks_, completed: @escaping () -> Void)
-    func getSongInfo(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
-    func getSongAnalysis(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void)
+    func getImageAlbum(track: _track_, completed: @escaping (Image?) -> Void)
+    func getImageAlbum(track: _track_, completed: @escaping (_track_) -> Void)
+    func getImageAlbum(tracks: [_track_], completed: @escaping ([_track_]) -> Void)
+    func getImageAlbum(playlist: _playlist_, completed: @escaping (Image?) -> Void)
+    func getImageAlbum(playlist: _playlist_, completed: @escaping (_playlist_) -> Void)
+    func getImageAlbum(playlists: [_playlist_], completed: @escaping ([_playlist_]) -> Void)
     
     
     //<<---- AddPlaylist ---->>\\
@@ -74,8 +71,9 @@ public protocol API {
     func Pause()
     func Next()
     func Previous()
-    func UserQueue(completed: @escaping (_DataTracks_) -> Void)
+    func UserQueue(completed: @escaping ([_track_]) -> Void)
     func AddToUserQueue(track_id: String)
     func Play(tracks_id: [String])
+    func Play(track_id: String)
     
 }

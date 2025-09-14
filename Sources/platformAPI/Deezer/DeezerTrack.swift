@@ -9,31 +9,40 @@ import DeezerAPI
 
 extension _DeezerAPI_ {
     
-    public func getAllTracks(playlist_id: String, completed: @escaping (_DataTracks_) -> Void){
+    public func getAllTracks(playlist_id: String, completed: @escaping ([_track_]) -> Void){
         deezer.getAllTracks(playlist_id: playlist_id){ results in
-            var tracks: _DataTracks_
-            tracks = _DataTracks_(platform: .Deezer, uri: playlist_id)
+            var tracks: [_track_] = []
             if let results = results?.data {
                 for result in results {
-                    tracks.append(result)
+                    tracks.append(_track_( result))
                 }
             }
             completed(tracks)
         }
     }
     
-    public func getTrack(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
-        deezer.getTrack(track_id: tracks.tracks[index].uri){ result in
-            if let result = result {
-                tracks.tracks[index] = _track_(track: result)
+    
+    public func getTracks(id: [String], completed: @escaping ([_track_]) -> Void) {
+        var tracks: [_track_] = []
+
+        openNextTrack(currentIndex: 0)
+        func openNextTrack(currentIndex: Int){
+            guard currentIndex < id.count else {
+                completed(tracks)
+                return
             }
-            completed()
+            
+            getTrack(id: id[currentIndex]){ result in
+                tracks.append(result)
+                openNextTrack(currentIndex: currentIndex+1)
+            }
         }
     }
+    
     public func getTrack(id: String, completed: @escaping (_track_) -> Void) {
         deezer.getTrack(track_id: id){ result in
             if let result = result {
-                completed(_track_(track: result))
+                completed(_track_( result))
             }
         }
     }

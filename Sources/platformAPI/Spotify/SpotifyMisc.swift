@@ -9,147 +9,112 @@ import SpotifyWebAPI
 
 extension _SpotifyAPI_ {
 
-    public func getSongGenres(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
-        if index < tracks.tracks.count {
-            if tracks.tracks[index].genres.isEmpty {
-                api.artist(tracks.tracks[index].artist_uri)
-                    .receive(on: DispatchQueue.main)
-                    .sink(
-                        receiveCompletion: { _ in },
-                        receiveValue: { artist in
-                            guard let genres = artist.genres else {return}
-                            tracks.tracks[index].genres = genres.joined(separator: " / ")
-                            completed()
-                        }
-                    )
-                    .store(in: &cancellables)
-            } else {
-                completed()
-            }
-        } else {
-            completed()
-        }
-    }
-    public func getSongsGenres(index: Int, tracks: _DataTracks_, completed: @escaping () -> Void) {
-        if tracks.tracks.count > 0 {
-            
-            //retrieve only tracks with empty genres
-            var tmpIndex: [Int] = [] //index of songs with no genres in tracks
-            var tmpArtists_arr: [[String]] = [[]] //pack of 50 of artist_uri
-            tmpArtists_arr.append([])
-            var tmpArtistsIndex = 0 //index of Artists
-            
-            for (index, track) in tracks.tracks.enumerated() {
-                if track.genres.isEmpty {
-                    if tmpArtists_arr[tmpArtistsIndex].count >= 50 {
-                        tmpArtistsIndex += 1
-                        tmpArtists_arr.append([])
-                    }
-                    tmpArtists_arr[tmpArtistsIndex].append(track.artist_uri)
-                    tmpIndex.append(index)
-                }
-            }
-            
-            if !tmpIndex.isEmpty {
-                //Load artists
-                var index_ = 0
-                let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: tmpArtists_arr.count)
-                loadNext(currentIndex: index)
-                func loadNext(currentIndex: Int){
-                    guard currentIndex < tmpArtists_arr.count else {
-                        self.arrStatus.delete_status(id: status_id)
-                        completed()
-                        return
-                    }
-                    
-                    
-                    self.arrStatus.inc_status(id: status_id)
-                    api.artists(tmpArtists_arr[currentIndex])
-                        .receive(on: DispatchQueue.main)
-                        .sink(
-                            receiveCompletion: { _ in },
-                            receiveValue: { artists in
-                                for artist in artists {
-                                    if let genres = artist?.genres {
-                                        tracks.tracks[tmpIndex[index_]].genres = genres.joined(separator: " / ")
-                                        index_ += 1
-                                    }
-                                }
-                                loadNext(currentIndex: currentIndex+1)
-                            }
-                        )
-                        .store(in: &cancellables)
-                }
-            } else {
-                completed()
-            }
-            
-        }
-    }
+
     
-    public func getImageAlbum(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
-        if index < tracks.tracks.count {
-            if tracks.tracks[index].image == nil {
-                let spotifyImage = SpotifyImage(url: URL(string: tracks.tracks[index].image_uri)!)
-                spotifyImage.load()
-                    .receive(on: DispatchQueue.main)
-                    .sink(
-                        receiveCompletion: { _ in },
-                        receiveValue: { image in
-                            if index < tracks.tracks.count {
-                                tracks.tracks[index].image = image
-                            }
-                            completed()
-                        }
-                    )
-                    .store(in: &cancellables)
-            }
-        }
-    }
-    public func getImageAlbum(playlists: _DataPlaylists_, index: Int, completed: @escaping () -> Void) {
-        if index < playlists.playlists.count {
-            if playlists.playlists[index].image == nil {
-                let spotifyImage = SpotifyImage(url: URL(string: playlists.playlists[index].image_uri)!)
-                spotifyImage.load()
-                    .receive(on: DispatchQueue.main)
-                    .sink(
-                        receiveCompletion: { _ in },
-                        receiveValue: { image in
-                            if index < playlists.playlists.count {
-                                playlists.playlists[index].image = image
-                            }
-                            completed()
-                        }
-                    )
-                    .store(in: &cancellables)
-            }
-        }
-    }
     
-    public func getSongInfo(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
-        if index < tracks.tracks.count {
-            api.trackAudioFeatures(tracks.tracks[index].uri)
+//    public func getSongGenres(tracks: [_track_], index: Int, completed: @escaping () -> Void) {
+//        if index < tracks.count {
+//            if tracks[index].genres.isEmpty {
+//                api.artist(tracks[index].artist_uri)
+//                    .receive(on: DispatchQueue.main)
+//                    .sink(
+//                        receiveCompletion: { _ in },
+//                        receiveValue: { artist in
+//                            guard let genres = artist.genres else {return}
+//                            tracks[index].genres = genres.joined(separator: " / ")
+//                            completed()
+//                        }
+//                    )
+//                    .store(in: &cancellables)
+//            } else {
+//                completed()
+//            }
+//        } else {
+//            completed()
+//        }
+//    }
+//    public func getSongsGenres(index: Int, tracks: [_track_], completed: @escaping () -> Void) {
+//        if tracks.count > 0 {
+//            
+//            //retrieve only tracks with empty genres
+//            var tmpIndex: [Int] = [] //index of songs with no genres in tracks
+//            var tmpArtists_arr: [[String]] = [[]] //pack of 50 of artist_uri
+//            tmpArtists_arr.append([])
+//            var tmpArtistsIndex = 0 //index of Artists
+//            
+//            for (index, track) in tracks.enumerated() {
+//                if track.genres.isEmpty {
+//                    if tmpArtists_arr[tmpArtistsIndex].count >= 50 {
+//                        tmpArtistsIndex += 1
+//                        tmpArtists_arr.append([])
+//                    }
+//                    tmpArtists_arr[tmpArtistsIndex].append(track.artist_uri)
+//                    tmpIndex.append(index)
+//                }
+//            }
+//            
+//            if !tmpIndex.isEmpty {
+//                //Load artists
+//                var index_ = 0
+//                let status_id = self.arrStatus.add_status(text: "Loading Songs Genre", ld_max: tmpArtists_arr.count)
+//                loadNext(currentIndex: index)
+//                func loadNext(currentIndex: Int){
+//                    guard currentIndex < tmpArtists_arr.count else {
+//                        self.arrStatus.delete_status(id: status_id)
+//                        completed()
+//                        return
+//                    }
+//                    
+//                    
+//                    self.arrStatus.inc_status(id: status_id)
+//                    api.artists(tmpArtists_arr[currentIndex])
+//                        .receive(on: DispatchQueue.main)
+//                        .sink(
+//                            receiveCompletion: { _ in },
+//                            receiveValue: { artists in
+//                                for artist in artists {
+//                                    if let genres = artist?.genres {
+//                                        tracks[tmpIndex[index_]].genres = genres.joined(separator: " / ")
+//                                        index_ += 1
+//                                    }
+//                                }
+//                                loadNext(currentIndex: currentIndex+1)
+//                            }
+//                        )
+//                        .store(in: &cancellables)
+//                }
+//            } else {
+//                completed()
+//            }
+//            
+//        }
+//    }
+    
+    
+    public func getImageAlbum(track: _track_, completed: @escaping (Image?) -> Void) {
+        if track.image == nil {
+            let spotifyImage = SpotifyImage(url: URL(string: track.image_uri)!)
+            spotifyImage.load()
                 .receive(on: DispatchQueue.main)
                 .sink(
                     receiveCompletion: { _ in },
-                    receiveValue: { audio in
-                        tracks.tracks[index].features = audio
-                        completed()
+                    receiveValue: { image in
+                        completed(image)
                     }
                 )
                 .store(in: &cancellables)
         }
     }
     
-    public func getSongAnalysis(tracks: _DataTracks_, index: Int, completed: @escaping () -> Void) {
-        if index < tracks.tracks.count {
-            api.trackAudioAnalysis(tracks.tracks[index].uri)
+    public func getImageAlbum(playlist: _playlist_, completed: @escaping (Image?) -> Void) {
+        if playlist.image == nil {
+            let spotifyImage = SpotifyImage(url: URL(string: playlist.image_uri)!)
+            spotifyImage.load()
                 .receive(on: DispatchQueue.main)
                 .sink(
                     receiveCompletion: { _ in },
-                    receiveValue: { audio in
-                        tracks.tracks[index].analysis = audio
-                        completed()
+                    receiveValue: { image in
+                        completed(image)
                     }
                 )
                 .store(in: &cancellables)
@@ -157,41 +122,107 @@ extension _SpotifyAPI_ {
     }
     
     
-    public func getSimilar(attribute: TrackAttributes, completed: @escaping (_DataTracks_) -> Void) {
-        let tracks = _DataTracks_(platform: .Spotify)
-        api.recommendations(attribute)
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { _ in },
-                receiveValue: { results in
-                    for result in results.tracks {
-                        tracks.append(result)
-                    }
-                    completed(tracks)
-                }
-            )
-            .store(in: &cancellables)
+    
+    
+    public func getImageAlbum(track: _track_, completed: @escaping (_track_) -> Void) {
+        var result: _track_
+        result = track
+        getImageAlbum(track: track){ image in
+            result.image = image
+            completed(result)
+        }
     }
     
-    public func getPlaylist(playlist_id: String, completed: @escaping (_DataPlaylists_) -> Void) {
-         var playlists: _DataPlaylists_
-         playlists = _DataPlaylists_(platform: .Spotify)
+    public func getImageAlbum(tracks: [_track_], completed: @escaping ([_track_]) -> Void) {
+        var out: [_track_] = []
 
-         self.api.playlist(playlist_id)
-             .receive(on: DispatchQueue.main)
-             .sink(
-                 receiveCompletion: { _ in },
-                 receiveValue: { playlistsItem in
+        openNextTrack(currentIndex: 0)
+        func openNextTrack(currentIndex: Int){
+            guard currentIndex < tracks.count else {
+                completed(out)
+                return
+            }
+            
+            getImageAlbum(track: tracks[currentIndex]){ result in
+                out.append(result)
+                openNextTrack(currentIndex: currentIndex+1)
+            }
+        }
+    }
+    
+    public func getImageAlbum(playlist: _playlist_, completed: @escaping (_playlist_) -> Void) {
+        var result: _playlist_
+        result = playlist
+        getImageAlbum(playlist: playlist){ image in
+            result.image = image
+            completed(result)
+        }
+    }
+    
+    public func getImageAlbum(playlists: [_playlist_], completed: @escaping ([_playlist_]) -> Void) {
+        var out: [_playlist_] = []
 
-                     playlists.playlists.append(_playlist_(
-                         title: playlistsItem.name,
-                         uri: playlistsItem.uri,
-                         image_uri: playlistsItem.images.largest?.url.absoluteString ?? "",
-                         creator_uri: playlistsItem.owner?.uri ?? ""))
-
-                     completed(playlists)
-                 }
-             )
-             .store(in: &cancellables)
-     }
+        openNextTrack(currentIndex: 0)
+        func openNextTrack(currentIndex: Int){
+            guard currentIndex < playlists.count else {
+                completed(out)
+                return
+            }
+            
+            getImageAlbum(playlist: out[currentIndex]){ result in
+                out.append(result)
+                openNextTrack(currentIndex: currentIndex+1)
+            }
+        }
+    }
+    
+    
+    
+//    public func getSongInfo(tracks: [_track_], index: Int, completed: @escaping () -> Void) {
+//        if index < tracks.count {
+//            api.trackAudioFeatures(tracks[index].uri)
+//                .receive(on: DispatchQueue.main)
+//                .sink(
+//                    receiveCompletion: { _ in },
+//                    receiveValue: { audio in
+//                        tracks[index].features = audio
+//                        completed()
+//                    }
+//                )
+//                .store(in: &cancellables)
+//        }
+//    }
+//    
+//    public func getSongAnalysis(tracks: [_track_], index: Int, completed: @escaping () -> Void) {
+//        if index < tracks.count {
+//            api.trackAudioAnalysis(tracks[index].uri)
+//                .receive(on: DispatchQueue.main)
+//                .sink(
+//                    receiveCompletion: { _ in },
+//                    receiveValue: { audio in
+//                        tracks[index].analysis = audio
+//                        completed()
+//                    }
+//                )
+//                .store(in: &cancellables)
+//        }
+//    }
+//    
+//    
+//    public func getSimilar(attribute: TrackAttributes, completed: @escaping ([_track_]) -> Void) {
+//        let tracks = [_track_](platform: .Spotify)
+//        api.recommendations(attribute)
+//            .receive(on: DispatchQueue.main)
+//            .sink(
+//                receiveCompletion: { _ in },
+//                receiveValue: { results in
+//                    for result in results.tracks {
+//                        tracks.append(result)
+//                    }
+//                    completed(tracks)
+//                }
+//            )
+//            .store(in: &cancellables)
+//    }
+    
 }

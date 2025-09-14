@@ -7,13 +7,13 @@ import Foundation
 
 extension _SpotifyAPI_ {
     
-    public func SearchPlaylist(search: String, completed: @escaping (_DataPlaylists_) -> Void) {
+    public func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void) {
         self.SearchPlaylist(search: search, max: 10, completed: completed)
     }
     
-    public func SearchPlaylist(search: String, max: Int, completed: @escaping (_DataPlaylists_) -> Void) {
-        var playlists: _DataPlaylists_
-        playlists = _DataPlaylists_(platform: .Spotify)
+    public func SearchPlaylist(search: String, max: Int, completed: @escaping ([_playlist_]) -> Void) {
+        var playlists: [_playlist_] = []
+        
         if search.isEmpty { completed(playlists); return }
 
         self.cancellables.insert(api.search(
@@ -25,16 +25,15 @@ extension _SpotifyAPI_ {
             receiveValue: { searchResults in
                 guard let results = searchResults.playlists?.items else { return }
                 for result in results {
-                    playlists.append(result)
+                    playlists.append(_playlist_( result))
                 }
                 completed(playlists)
             }
         )
         )
     }
-    public func SearchTrack(search: String, completed: @escaping (_DataTracks_) -> Void) {
-        var tracks: _DataTracks_
-        tracks = _DataTracks_(platform: .Spotify)
+    public func SearchTrack(search: String, completed: @escaping ([_track_]) -> Void) {
+        var tracks: [_track_] = []
         if search.isEmpty { completed(tracks); return }
 
         self.cancellables.insert(api.search(
@@ -46,15 +45,15 @@ extension _SpotifyAPI_ {
             receiveValue: { searchResults in
                 guard let results = searchResults.tracks?.items else { return }
                 for result in results {
-                    tracks.append(result)
+                    tracks.append(_track_( result))
                 }
                 completed(tracks)
             }
         )
         )
     }
-    public func SearchUser(search: String, completed: @escaping (_DataUsers_) -> Void) {
+    public func SearchUser(search: String, completed: @escaping ([_user_]) -> Void) {
         print("Not Available on Spotify")
-        completed(_DataUsers_(platform: .Spotify))
+        completed([_user_]())
     }
 }

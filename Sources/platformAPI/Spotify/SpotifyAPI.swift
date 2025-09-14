@@ -10,6 +10,7 @@ import SpotifyWebAPI
 
 
 public class _SpotifyAPI_: ObservableObject, API {
+
     public func getPlatform() -> platform {
         return .Spotify
     }
