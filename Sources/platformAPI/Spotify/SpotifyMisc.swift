@@ -92,7 +92,7 @@ extension _SpotifyAPI_ {
     
     
     public func getImageAlbum(track: _track_, completed: @escaping (Image?) -> Void) {
-        if track.image == nil {
+        if track.image == nil && !track.uri.isEmpty {
             let spotifyImage = SpotifyImage(url: URL(string: track.image_uri)!)
             spotifyImage.load()
                 .receive(on: DispatchQueue.main)
@@ -107,7 +107,7 @@ extension _SpotifyAPI_ {
     }
     
     public func getImageAlbum(playlist: _playlist_, completed: @escaping (Image?) -> Void) {
-        if playlist.image == nil {
+        if playlist.image == nil  && !playlist.uri.isEmpty {
             let spotifyImage = SpotifyImage(url: URL(string: playlist.image_uri)!)
             spotifyImage.load()
                 .receive(on: DispatchQueue.main)
