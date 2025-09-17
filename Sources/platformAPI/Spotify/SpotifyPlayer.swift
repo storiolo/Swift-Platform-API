@@ -48,29 +48,17 @@ extension _SpotifyAPI_ {
     }
     
     public func UserQueue(completed: @escaping ([_track_]) -> Void) {
-        var tracks: [_track_] = []
-        
         self.api.queue()
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { SpotifyQueue in
-                    loadTracks(index: 0)
                     
-                    func loadTracks(index: Int){
-                        guard index < SpotifyQueue.queue.count else {
-                            completed(tracks)
-                            return
-                        }
-                        
-                        let track = SpotifyQueue.queue[index]
-                        if let uri = track.uri {
-                            self.getTrack(id: uri){ track in
-                                tracks.append(track)
-                                loadTracks(index: index + 1)
-                            }
-                        }
+                    let uris = SpotifyQueue.queue.compactMap { $0.uri }
+                    self.getTracks(id: uris){ tracks in
+                        completed(tracks)
                     }
+                    
                 }
             )
             .store(in: &cancellables)

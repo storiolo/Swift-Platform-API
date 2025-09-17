@@ -38,21 +38,39 @@ extension _SpotifyAPI_ {
     
 
     
+//    public func getTracks(id: [String], completed: @escaping ([_track_]) -> Void) {
+//        var tracks: [_track_] = []
+//
+//        openNextTrack(currentIndex: 0)
+//        func openNextTrack(currentIndex: Int){
+//            guard currentIndex < id.count else {
+//                completed(tracks)
+//                return
+//            }
+//            
+//            getTrack(id: id[currentIndex]){ result in
+//                tracks.append(result)
+//                openNextTrack(currentIndex: currentIndex+1)
+//            }
+//        }
+//    }
+    
     public func getTracks(id: [String], completed: @escaping ([_track_]) -> Void) {
-        var tracks: [_track_] = []
-
-        openNextTrack(currentIndex: 0)
-        func openNextTrack(currentIndex: Int){
-            guard currentIndex < id.count else {
-                completed(tracks)
-                return
-            }
-            
-            getTrack(id: id[currentIndex]){ result in
-                tracks.append(result)
-                openNextTrack(currentIndex: currentIndex+1)
-            }
-        }
+        api.tracks(id)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { tracks in
+                    var r: [_track_] = []
+                    for track in tracks {
+                        if let track = track {
+                            r.append(_track_(track))
+                        }
+                    }
+                    completed(r)
+                }
+            )
+            .store(in: &cancellables)
     }
     
     public func getTrack(id: String, completed: @escaping (_track_) -> Void) {
