@@ -15,6 +15,7 @@ public class _SpotifyAPI_: ObservableObject, API {
         return .Spotify
     }
     
+    @Published var isLoadConnect = true
     @Published var isAuthorized = false
     @Published var isRetrievingTokens = false
     
@@ -66,7 +67,7 @@ public class _SpotifyAPI_: ObservableObject, API {
         return !self.isAuthorized
     }
     public func isTryingtoConnect() -> Bool {
-        return false
+        return isLoadConnect
     }
     public func disconnect(){
         authorizationManagerDidDeauthorize()

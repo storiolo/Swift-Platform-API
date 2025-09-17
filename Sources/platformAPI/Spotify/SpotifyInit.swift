@@ -34,6 +34,7 @@ extension _SpotifyAPI_ {
      */
     func authorizationManagerDidChange() {
         self.isAuthorized = self.api.authorizationManager.isAuthorized()
+        self.isLoadConnect = false
         print("Spotify: isAuthorized", self.isAuthorized)
         
         do {
