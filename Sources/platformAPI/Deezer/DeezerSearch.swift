@@ -9,10 +9,7 @@ import DeezerAPI
 
 extension _DeezerAPI_ {
     public func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void){
-        self.SearchPlaylist(search: search, max: 10, completed: completed)
-    }
-    public func SearchPlaylist(search: String, max: Int, completed: @escaping ([_playlist_]) -> Void){
-        deezer.SearchPlaylist(search: search, max: max){ results in
+        deezer.SearchPlaylist(search: search, max: 10){ results in
             var playlists: [_playlist_] = []
             
             if let results = results?.data {

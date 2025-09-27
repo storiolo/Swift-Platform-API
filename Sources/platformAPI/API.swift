@@ -20,12 +20,8 @@ public protocol API {
     func disconnect()
     func getPlatform() -> platform
     
-    //only used in spotify and for NextPage
-    func getfuncStatus() -> [_arrStatus_._Status_]
-    
     
     //<<---- Search ---->>\\
-    func SearchPlaylist(search: String, max: Int, completed: @escaping ([_playlist_]) -> Void)
     func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void)
     func SearchTrack(search: String, completed: @escaping ([_track_]) -> Void)
     func SearchUser(search: String, completed: @escaping ([_user_]) -> Void)
@@ -35,18 +31,20 @@ public protocol API {
     func getUser(completed: @escaping (_user_) -> Void)
     func getUser(user_id: String, completed: @escaping (_user_) -> Void)
     func getUsers(user_ids: [String], completed: @escaping ([_user_]) -> Void)
-    func getAllUserPlaylists(completed: @escaping ([_playlist_]) -> Void)
+    
     func getUserCurrentSong(completed: @escaping (_track_) -> Void)
-    func getAllUserTracks(completed: @escaping ([_track_]) -> Void)
-    func getAllUserTracks(index: Int, completed: @escaping ([_track_]) -> Void)
-    func getAllUserTracks(until: [_track_], completed: @escaping ([_track_]) -> Void)
     func getHistory(completed: @escaping ([_track_]) -> Void)
-    func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_]) -> Void)
     func getFollowing(completed: @escaping ([_user_]) -> Void)
+    
+    //<<---- Playlist ---->>\\
+    func getAllUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void)
+    func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void)
+    
     
     
     //<<---- Track ---->>\\
-    func getAllTracks(playlist_id: String, completed: @escaping ([_track_]) -> Void)
+    func getAllUserTracks(completed: @escaping ([_track_], URL?) -> Void)
+    func getAllTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void)
     func getTrack(id: String, completed: @escaping (_track_) -> Void)
     func getTracks(id: [String], completed: @escaping ([_track_]) -> Void)
     
@@ -75,5 +73,10 @@ public protocol API {
     func AddToUserQueue(track_id: String)
     func Play(tracks_id: [String])
     func Play(track_id: String)
+    
+    
+    //<<---- Next ---->>\\
+    func loadNext(tracks: [_track_], url: URL?, completed: @escaping ([_track_], URL?) -> Void)
+    func loadNext(playlists: [_playlist_], url: URL?, completed: @escaping ([_playlist_], URL?) -> Void)
     
 }

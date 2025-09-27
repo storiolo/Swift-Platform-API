@@ -5,12 +5,12 @@
 //  Created by Nicolas Storiolo on 27/09/2025.
 //
 
-public func _imb_<T>(
-    items: [T],
-    fetch: @escaping (T, @escaping (T) -> Void) -> Void,
-    completed: @escaping ([T]) -> Void
+public func _imb_<Input, Output>(
+    items: [Input],
+    fetch: @escaping (Input, @escaping (Output) -> Void) -> Void,
+    completed: @escaping ([Output]) -> Void
 ) {
-    var out: [T] = []
+    var out: [Output] = []
 
     func openNext(index: Int) {
         guard index < items.count else {

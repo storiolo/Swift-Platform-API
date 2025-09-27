@@ -18,6 +18,7 @@ public class _playlist_: ObservableObject, Identifiable {
     @Published public var image: Image? = nil
     @Published public var creator_uri: String = ""
     @Published public var platform: platform = .None
+    
 
     public init() {}
 

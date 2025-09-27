@@ -9,7 +9,19 @@ import DeezerAPI
 
 extension _DeezerAPI_ {
     
-    public func getAllTracks(playlist_id: String, completed: @escaping ([_track_]) -> Void){
+    public func getAllUserTracks(completed: @escaping ([_track_], URL?) -> Void){
+        deezer.getAllUserTracks(){ results in
+            var tracks: [_track_] = []
+            if let results = results?.data {
+                for result in results {
+                    tracks.append(_track_( result))
+                }
+            }
+            completed(tracks, nil)
+        }
+    }
+    
+    public func getAllTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void){
         deezer.getAllTracks(playlist_id: playlist_id){ results in
             var tracks: [_track_] = []
             if let results = results?.data {
@@ -17,7 +29,7 @@ extension _DeezerAPI_ {
                     tracks.append(_track_( result))
                 }
             }
-            completed(tracks)
+            completed(tracks, nil)
         }
     }
     

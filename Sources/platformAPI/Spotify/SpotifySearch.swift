@@ -8,45 +8,32 @@ import Foundation
 extension _SpotifyAPI_ {
     
     public func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void) {
-        self.SearchPlaylist(search: search, max: 10, completed: completed)
-    }
-    
-    public func SearchPlaylist(search: String, max: Int, completed: @escaping ([_playlist_]) -> Void) {
-        var playlists: [_playlist_] = []
-        
-        if search.isEmpty { completed(playlists); return }
+        if search.isEmpty { completed([]); return }
 
         self.cancellables.insert(api.search(
-            query: search, categories: [.playlist], limit: max
+            query: search, categories: [.playlist], limit: 10
         )
         .receive(on: DispatchQueue.main)
         .sink(
             receiveCompletion: { _ in  },
             receiveValue: { searchResults in
-                guard let results = searchResults.playlists?.items else { return }
-                for result in results {
-                    playlists.append(_playlist_( result))
-                }
+                let playlists = searchResults.playlists?.items.map { _playlist_($0) } ?? []
                 completed(playlists)
             }
         )
         )
     }
     public func SearchTrack(search: String, completed: @escaping ([_track_]) -> Void) {
-        var tracks: [_track_] = []
-        if search.isEmpty { completed(tracks); return }
-
+        if search.isEmpty { completed([]); return }
+        
         self.cancellables.insert(api.search(
-            query: search, categories: [.track], limit: 5
+            query: search, categories: [.track], limit: 10
         )
         .receive(on: DispatchQueue.main)
         .sink(
             receiveCompletion: { _ in },
             receiveValue: { searchResults in
-                guard let results = searchResults.tracks?.items else { return }
-                for result in results {
-                    tracks.append(_track_( result))
-                }
+                let tracks = searchResults.tracks?.items.map { _track_($0) } ?? []
                 completed(tracks)
             }
         )

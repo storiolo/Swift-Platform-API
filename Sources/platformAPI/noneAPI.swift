@@ -8,7 +8,7 @@ import SwiftUI
 
 public class _NoAPI_: ObservableObject, API {
     public init() {}
-
+    
     //<<---- API ---->>\\
     public func isConnected() -> Bool {
         print("API: No API Selected")
@@ -30,20 +30,11 @@ public class _NoAPI_: ObservableObject, API {
     }
 
     public func getPlatform() -> platform {
+        print("API: No API Selected")
         return .None
     }
 
-    public func getfuncStatus() -> [_arrStatus_._Status_] {
-        print("API: No API Selected")
-        return []
-    }
-
     //<<---- Search ---->>\\
-    public func SearchPlaylist(search: String, max: Int, completed: @escaping ([_playlist_]) -> Void) {
-        print("API: No API Selected")
-        completed([])
-    }
-
     public func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void) {
         print("API: No API Selected")
         completed([])
@@ -75,37 +66,12 @@ public class _NoAPI_: ObservableObject, API {
         completed([])
     }
 
-    public func getAllUserPlaylists(completed: @escaping ([_playlist_]) -> Void) {
-        print("API: No API Selected")
-        completed([])
-    }
-
     public func getUserCurrentSong(completed: @escaping (_track_) -> Void) {
         print("API: No API Selected")
         completed(_track_())
     }
 
-    public func getAllUserTracks(completed: @escaping ([_track_]) -> Void) {
-        print("API: No API Selected")
-        completed([])
-    }
-
-    public func getAllUserTracks(index: Int, completed: @escaping ([_track_]) -> Void) {
-        print("API: No API Selected")
-        completed([])
-    }
-
-    public func getAllUserTracks(until: [_track_], completed: @escaping ([_track_]) -> Void) {
-        print("API: No API Selected")
-        completed([])
-    }
-
     public func getHistory(completed: @escaping ([_track_]) -> Void) {
-        print("API: No API Selected")
-        completed([])
-    }
-
-    public func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_]) -> Void) {
         print("API: No API Selected")
         completed([])
     }
@@ -115,10 +81,26 @@ public class _NoAPI_: ObservableObject, API {
         completed([])
     }
 
-    //<<---- Track ---->>\\
-    public func getAllTracks(playlist_id: String, completed: @escaping ([_track_]) -> Void) {
+    //<<---- Playlist ---->>\\
+    public func getAllUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void) {
         print("API: No API Selected")
-        completed([])
+        completed([], nil)
+    }
+
+    public func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void) {
+        print("API: No API Selected")
+        completed([], nil)
+    }
+
+    //<<---- Track ---->>\\
+    public func getAllUserTracks(completed: @escaping ([_track_], URL?) -> Void) {
+        print("API: No API Selected")
+        completed([], nil)
+    }
+
+    public func getAllTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void) {
+        print("API: No API Selected")
+        completed([], nil)
     }
 
     public func getTrack(id: String, completed: @escaping (_track_) -> Void) {
@@ -210,5 +192,16 @@ public class _NoAPI_: ObservableObject, API {
 
     public func Play(track_id: String) {
         print("API: No API Selected")
+    }
+    
+    //<<---- Next ---->>\\
+    public func loadNext(tracks: [_track_], url: URL?, completed: @escaping ([_track_], URL?) -> Void) {
+        print("API: No API Selected")
+        completed([], nil)
+    }
+    
+    public func loadNext(playlists: [_playlist_], url: URL?, completed: @escaping ([_playlist_], URL?) -> Void) {
+        print("API: No API Selected")
+        completed([], nil)
     }
 }

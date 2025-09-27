@@ -9,33 +9,37 @@ import SpotifyWebAPI
 
 extension _SpotifyAPI_ {
     
-    public func getImageAlbum(track: _track_, completed: @escaping (Image?) -> Void) {
-        if track.image == nil && !track.uri.isEmpty {
-            let spotifyImage = SpotifyImage(url: URL(string: track.image_uri)!)
-            spotifyImage.load()
-                .receive(on: DispatchQueue.main)
-                .sink(
-                    receiveCompletion: { _ in },
-                    receiveValue: { image in
-                        completed(image)
-                    }
-                )
-                .store(in: &cancellables)
+    public func getImageUri(_ uri: String, completed: @escaping (Image?) -> Void) {
+        guard let url = URL(string: uri) else {
+            completed(nil)
+            return
         }
+        getImageUri(url, completed: completed)
+    }
+    public func getImageUri(_ url: URL, completed: @escaping (Image?) -> Void) {
+        let spotifyImage = SpotifyImage(url: url)
+        spotifyImage.load()
+            .receive(on: DispatchQueue.main)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: completed)
+            .store(in: &cancellables)
     }
     
+    
+    
+    
+    public func getImageAlbum(track: _track_, completed: @escaping (Image?) -> Void) {
+        if track.image == nil {
+            getImageUri(track.uri){ result in
+                completed(result)
+            }
+        }
+    }
     public func getImageAlbum(playlist: _playlist_, completed: @escaping (Image?) -> Void) {
-        if playlist.image == nil  && !playlist.uri.isEmpty {
-            let spotifyImage = SpotifyImage(url: URL(string: playlist.image_uri)!)
-            spotifyImage.load()
-                .receive(on: DispatchQueue.main)
-                .sink(
-                    receiveCompletion: { _ in },
-                    receiveValue: { image in
-                        completed(image)
-                    }
-                )
-                .store(in: &cancellables)
+        if playlist.image == nil {
+            getImageUri(playlist.uri){ result in
+                completed(result)
+            }
         }
     }
     
@@ -50,7 +54,6 @@ extension _SpotifyAPI_ {
             completed(result)
         }
     }
-    
     public func getImageAlbum(playlist: _playlist_, completed: @escaping (_playlist_) -> Void) {
         var result: _playlist_
         result = playlist
@@ -61,6 +64,7 @@ extension _SpotifyAPI_ {
     }
     
     
+    
     public func getImageAlbum(playlists: [_playlist_], completed: @escaping ([_playlist_]) -> Void) {
         _imb_(items: playlists, fetch: getImageAlbum(playlist:completed:), completed: completed)
     }
@@ -69,6 +73,4 @@ extension _SpotifyAPI_ {
         _imb_(items: tracks, fetch: getImageAlbum(track:completed:), completed: completed)
     }
 
-
-    
 }

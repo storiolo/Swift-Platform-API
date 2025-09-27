@@ -20,7 +20,7 @@ public class _track_: ObservableObject, Identifiable {
     @Published public var genres: String = ""
     @Published public var image: Image? = nil
     @Published public var platform: platform = .None
-
+    
     public init() {}
 
     public init(_ track: Track) {
