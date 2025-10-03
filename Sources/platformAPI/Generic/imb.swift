@@ -5,7 +5,16 @@
 //  Created by Nicolas Storiolo on 27/09/2025.
 //
 
-public func _imb_<Input, Output>(
+protocol HasPlatform {
+    var platform: platform { get }
+}
+
+extension _user_: HasPlatform {}
+extension _playlist_: HasPlatform {}
+extension _track_: HasPlatform {}
+
+
+func _imb_<Input, Output: HasPlatform>(
     items: [Input],
     fetch: @escaping (Input, @escaping (Output) -> Void) -> Void,
     completed: @escaping ([Output]) -> Void
@@ -19,8 +28,12 @@ public func _imb_<Input, Output>(
         }
 
         fetch(items[index]) { result in
-            out.append(result)
+            //no platform = no result
+            if result.platform != platform.None {
+                out.append(result)
+            }
             openNext(index: index + 1)
+
         }
     }
 
