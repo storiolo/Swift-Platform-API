@@ -10,7 +10,7 @@ extension _SpotifyAPI_ {
     
     //Liked Songs
     public func getAllUserTracks(completed: @escaping ([_track_], URL?) -> Void) {
-        api.currentUserSavedTracks(limit: 50, offset: 0)
+        api.currentUserSavedTracks(limit: 10, offset: 0)
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
@@ -28,7 +28,7 @@ extension _SpotifyAPI_ {
     
     
     public func getAllTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void) {
-        api.playlistTracks(playlist_id, offset: 0)
+        api.playlistTracks(playlist_id, limit: 10, offset: 0)
             .extendPagesConcurrently(api)
             .receive(on: DispatchQueue.main)
             .sink(
