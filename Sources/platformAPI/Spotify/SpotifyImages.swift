@@ -20,8 +20,12 @@ extension _SpotifyAPI_ {
         let spotifyImage = SpotifyImage(url: url)
         spotifyImage.load()
             .receive(on: DispatchQueue.main)
-            .sink(receiveCompletion: { _ in },
-                  receiveValue: completed)
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { image in
+                    completed(image)
+                }
+            )
             .store(in: &cancellables)
     }
     
