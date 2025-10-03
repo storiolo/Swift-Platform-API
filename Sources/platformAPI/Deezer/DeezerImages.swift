@@ -10,18 +10,22 @@ import DeezerAPI
 extension _DeezerAPI_ {
     
     public func getImageAlbum(track: _track_, completed: @escaping (Image?) -> Void) {
-        if track.image == nil && !track.image_uri.isEmpty {
-            deezer.getImageAlbum(coverURL: track.image_uri){ image in
-                completed(image ?? nil)
-            }
+        guard track.image == nil && !track.image_uri.isEmpty else {
+            completed(track.image)
+            return
+        }
+        deezer.getImageAlbum(coverURL: track.image_uri){ image in
+            completed(image ?? nil)
         }
     }
     
     public func getImageAlbum(playlist: _playlist_, completed: @escaping (Image?) -> Void) {
-        if playlist.image == nil && !playlist.image_uri.isEmpty {
-            deezer.getImageAlbum(coverURL: playlist.image_uri){ image in
-                completed(image ?? nil)
-            }
+        guard playlist.image == nil && !playlist.image_uri.isEmpty else {
+            completed(playlist.image)
+            return
+        }
+        deezer.getImageAlbum(coverURL: playlist.image_uri){ image in
+            completed(image ?? nil)
         }
     }
     

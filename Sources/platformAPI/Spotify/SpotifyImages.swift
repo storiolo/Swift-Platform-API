@@ -33,17 +33,21 @@ extension _SpotifyAPI_ {
     
     
     public func getImageAlbum(track: _track_, completed: @escaping (Image?) -> Void) {
-        if track.image == nil {
-            getImageUri(track.image_uri){ result in
-                completed(result)
-            }
+        guard track.image == nil else {
+            completed(track.image)
+            return
+        }
+        getImageUri(track.image_uri){ result in
+            completed(result)
         }
     }
     public func getImageAlbum(playlist: _playlist_, completed: @escaping (Image?) -> Void) {
-        if playlist.image == nil {
-            getImageUri(playlist.image_uri){ result in
-                completed(result)
-            }
+        guard playlist.image == nil else {
+            completed(playlist.image)
+            return
+        }
+        getImageUri(playlist.image_uri){ result in
+            completed(result)
         }
     }
     
