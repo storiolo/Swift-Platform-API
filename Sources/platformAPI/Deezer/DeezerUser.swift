@@ -31,6 +31,7 @@ extension _DeezerAPI_ {
     }
     
     public func getUser(user_id: String, completed: @escaping (_user_) -> Void) {
+        let user_id = user_id.replacingOccurrences(of: "deezer:", with: "")
         deezer.getaUser(user_id: user_id){ user in
             guard let user = user else { completed(_user_()); return }
             self.fetchImageUser(user, completed: completed)

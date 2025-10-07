@@ -18,6 +18,7 @@ extension _DeezerAPI_ {
     }
     
     public func getTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void){
+        let playlist_id = playlist_id.replacingOccurrences(of: "deezer:", with: "")
         deezer.getTracks(playlist_id: playlist_id){ results in
             let tracks = results?.data?.map(_track_.init) ?? []
             let nextURL: URL? = results?.next.flatMap { URL(string: $0) }
@@ -31,6 +32,7 @@ extension _DeezerAPI_ {
     }
     
     public func getTrack(id: String, completed: @escaping (_track_) -> Void) {
+        let id = id.replacingOccurrences(of: "deezer:", with: "")
         deezer.getTrack(track_id: id){ result in
             if let result = result {
                 completed(_track_( result))

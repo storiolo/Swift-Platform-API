@@ -37,7 +37,7 @@ public class _track_: ObservableObject, Identifiable {
         self.artist = track.artist?.name ?? ""
         self.artist_uri = String(track.artist?.id ?? 0)
         self.image_uri = track.album?.cover_xl ?? ""
-        self.uri = String(track.id ?? 0)
+        self.uri = "deezer:\(track.id ?? 0)"
         self.platform = .Deezer
     }
 }

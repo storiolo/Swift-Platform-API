@@ -21,7 +21,7 @@ public class _user_: ObservableObject, Identifiable {
     
     public init(_ user: DeezerUser) {
         self.displayName = user.name ?? "N/A"
-        self.uri = String(user.id ?? 0)
+        self.uri = "deezer:\(user.id ?? 0)"
         self.platform = .Deezer
     }
 

@@ -32,7 +32,7 @@ public class _playlist_: ObservableObject, Identifiable {
 
     public init(_ playlist: DeezerPlaylist) {
         self.title = playlist.title ?? ""
-        self.uri = String(playlist.id ?? 0)
+        self.uri = "deezer:\(playlist.id ?? 0)"
         self.image_uri = playlist.picture ?? ""
         self.creator_uri = String(playlist.creator?.id ?? 0)
         self.platform = .Deezer

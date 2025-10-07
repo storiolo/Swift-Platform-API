@@ -20,6 +20,7 @@ extension _DeezerAPI_ {
     }
     
     public func getPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void){
+        let user_id = user_id.replacingOccurrences(of: "deezer:", with: "")
         deezer.getPlaylistsOfUser(user_id: user_id){ results in
             let playlists = results?.data?.map { _playlist_($0) } ?? []
             let nextURL: URL? = results?.next.flatMap { URL(string: $0) }
