@@ -11,29 +11,19 @@ import DeezerAPI
 
 extension _DeezerAPI_ {
     
-    public func getAllUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void) {
-        deezer.getAllUserPlaylists(){ results in
-            var playlists: [_playlist_] = []
-            
-            if let results = results?.data {
-                for result in results {
-                    playlists.append(_playlist_( result))
-                }
-            }
-            completed(playlists, nil)
+    public func getUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void) {
+        deezer.getUserPlaylists { results in
+            let playlists = results?.data?.map { _playlist_($0) } ?? []
+            let nextURL: URL? = results?.next.flatMap { URL(string: $0) }
+            completed(playlists, nextURL)
         }
     }
     
-    public func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void){
-        deezer.getAllPlaylistsOfUser(user_id: user_id){ results in
-            var playlists: [_playlist_] = []
-            
-            if let results = results?.data {
-                for result in results {
-                    playlists.append(_playlist_( result))
-                }
-            }
-            completed(playlists, nil)
+    public func getPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void){
+        deezer.getPlaylistsOfUser(user_id: user_id){ results in
+            let playlists = results?.data?.map { _playlist_($0) } ?? []
+            let nextURL: URL? = results?.next.flatMap { URL(string: $0) }
+            completed(playlists, nextURL)
         }
     }
 }

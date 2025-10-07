@@ -24,7 +24,6 @@ public protocol API {
     //<<---- Search ---->>\\
     func SearchPlaylist(search: String, completed: @escaping ([_playlist_]) -> Void)
     func SearchTrack(search: String, completed: @escaping ([_track_]) -> Void)
-    func SearchUser(search: String, completed: @escaping ([_user_]) -> Void)
     
     
     //<<---- User ---->>\\
@@ -34,17 +33,16 @@ public protocol API {
     
     func getUserCurrentSong(completed: @escaping (_track_) -> Void)
     func getHistory(completed: @escaping ([_track_]) -> Void)
-    func getFollowing(completed: @escaping ([_user_]) -> Void)
     
     //<<---- Playlist ---->>\\
-    func getAllUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void)
-    func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void)
+    func getUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void)
+    func getPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void)
     
     
     
     //<<---- Track ---->>\\
-    func getAllUserTracks(completed: @escaping ([_track_], URL?) -> Void)
-    func getAllTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void)
+    func getUserTracks(completed: @escaping ([_track_], URL?) -> Void)
+    func getTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void)
     func getTrack(id: String, completed: @escaping (_track_) -> Void)
     func getTracks(id: [String], completed: @escaping ([_track_]) -> Void)
     

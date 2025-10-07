@@ -39,8 +39,4 @@ extension _SpotifyAPI_ {
         )
         )
     }
-    public func SearchUser(search: String, completed: @escaping ([_user_]) -> Void) {
-        print("Not Available on Spotify")
-        completed([_user_]())
-    }
 }

@@ -9,7 +9,7 @@ import SpotifyWebAPI
 extension _SpotifyAPI_ {
     
     //Liked Songs
-    public func getAllUserTracks(completed: @escaping ([_track_], URL?) -> Void) {
+    public func getUserTracks(completed: @escaping ([_track_], URL?) -> Void) {
         api.currentUserSavedTracks(limit: 20, offset: 0)
             .receive(on: DispatchQueue.main)
             .sink(
@@ -27,7 +27,7 @@ extension _SpotifyAPI_ {
     }
     
     
-    public func getAllTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void) {
+    public func getTracks(playlist_id: String, completed: @escaping ([_track_], URL?) -> Void) {
         api.playlistTracks(playlist_id, limit: 20, offset: 0)
             .receive(on: DispatchQueue.main)
             .sink(

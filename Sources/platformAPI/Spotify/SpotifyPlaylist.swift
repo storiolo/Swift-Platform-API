@@ -24,11 +24,11 @@ extension _SpotifyAPI_ {
             .store(in: &cancellables)
     }
     
-    public func getAllUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void) {
+    public func getUserPlaylists(completed: @escaping ([_playlist_], URL?) -> Void) {
         fetchPlaylists(self.api.currentUserPlaylists(limit: 50), completed: completed)
     }
 
-    public func getAllPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void) {
+    public func getPlaylistsOfUser(user_id: String, completed: @escaping ([_playlist_], URL?) -> Void) {
         fetchPlaylists(self.api.userPlaylists(for: user_id), completed: completed)
     }
 }

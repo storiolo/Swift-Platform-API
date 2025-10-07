@@ -92,9 +92,4 @@ extension _SpotifyAPI_ {
             .store(in: &cancellables)
     }
     
-    
-    public func getFollowing(completed: @escaping ([_user_]) -> Void) {
-        print("Not Available on Spotify")
-        completed([_user_]())
-    }
 }
